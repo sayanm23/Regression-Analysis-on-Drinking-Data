@@ -1,0 +1,5892 @@
+#LyX 2.3 created this file. For more info see http://www.lyx.org/
+\lyxformat 544
+\begin_document
+\begin_header
+\save_transient_properties true
+\origin unavailable
+\textclass article
+\begin_preamble
+\usepackage{titling}
+\fancyhf{}               % Clear fancy header/footer
+\fancyhead[L]{Regression Project}   % My name in Left footer
+\fancyhead[R]{IIT Kanpur}
+\fancyfoot[C]{\thepage}  % Page number in Right footer
+\fancyfoot[L]{Niranjan Dey}  % Page number in Right footer
+\makeatletter
+\let\ps@plain\ps@fancy   % Plain page style = fancy page style
+\makeatother
+\end_preamble
+\use_default_options true
+\begin_modules
+theorems-ams
+knitr
+\end_modules
+\maintain_unincluded_children false
+\language english
+\language_package default
+\inputencoding auto
+\fontencoding global
+\font_roman "lmodern" "default"
+\font_sans "lmss" "default"
+\font_typewriter "lmtt" "default"
+\font_math "auto" "auto"
+\font_default_family rmdefault
+\use_non_tex_fonts false
+\font_sc false
+\font_osf false
+\font_sf_scale 100 100
+\font_tt_scale 100 100
+\use_microtype false
+\use_dash_ligatures true
+\graphics default
+\default_output_format default
+\output_sync 0
+\bibtex_command default
+\index_command default
+\paperfontsize 12
+\spacing single
+\use_hyperref false
+\papersize default
+\use_geometry true
+\use_package amsmath 1
+\use_package amssymb 1
+\use_package cancel 1
+\use_package esint 1
+\use_package mathdots 1
+\use_package mathtools 1
+\use_package mhchem 1
+\use_package stackrel 1
+\use_package stmaryrd 1
+\use_package undertilde 1
+\cite_engine basic
+\cite_engine_type default
+\biblio_style plain
+\use_bibtopic false
+\use_indices false
+\paperorientation portrait
+\suppress_date true
+\justification true
+\use_refstyle 1
+\use_minted 0
+\index Index
+\shortcut idx
+\color #008000
+\end_index
+\leftmargin 3.5cm
+\topmargin 1.5cm
+\rightmargin 3.5cm
+\bottommargin 1.5cm
+\secnumdepth 3
+\tocdepth 3
+\paragraph_separation indent
+\paragraph_indentation default
+\is_math_indent 0
+\math_numbering_side default
+\quotes_style english
+\dynamic_quotes 0
+\papercolumns 1
+\papersides 1
+\paperpagestyle fancy
+\tracking_changes false
+\output_changes false
+\html_math_output 0
+\html_css_as_file 0
+\html_be_strict false
+\end_header
+
+\begin_body
+
+\begin_layout Title
+Regression Analysis Of 
+\begin_inset Newline newline
+\end_inset
+
+Population Drinking Dataset
+\end_layout
+
+\begin_layout Author
+Niranjan Dey
+\end_layout
+
+\begin_layout Standard
+\begin_inset CommandInset toc
+LatexCommand tableofcontents
+
+\end_inset
+
+
+\begin_inset Newpage pagebreak
+\end_inset
+
+
+\end_layout
+
+\begin_layout Section
+Introduction
+\end_layout
+
+\begin_layout Subsection*
+About The Data
+\end_layout
+
+\begin_layout Standard
+Here we have 
+\begin_inset Formula $46$
+\end_inset
+
+ observations from different places of the following quantiles :-
+\begin_inset Newline newline
+\end_inset
+
+
+\begin_inset Formula 
+\begin{align*}
+ & \text{Urban Population}\\
+ & \text{Late Births}\\
+ & \text{Wine Consumption Per Capita}\\
+ & \text{Liquor Consumption Per Capita}\\
+ & \text{Cirrhosis Death Rate}
+\end{align*}
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+Here our response variable is Cirrhosis Death Rate and others are all covariates.
+\end_layout
+
+\begin_layout Standard
+To get an overview of the data, we first perform the exploratory data analysis.
+\end_layout
+
+\begin_layout Section
+Exploratory Data Analysis
+\end_layout
+
+\begin_layout Subsection*
+Loading the Dataset
+\end_layout
+
+\begin_layout Standard
+To get an overview of the data, we first load it in R and print first few
+ values:-
+\end_layout
+
+\begin_layout Standard
+\begin_inset ERT
+status open
+
+\begin_layout Plain Layout
+
+<<comment=NA,echo=T,fig.width=8,fig.height=5.5,out.width='.8
+\backslash
+
+\backslash
+linewidth',warning=F,message=F,size='scriptsize'>>=
+\end_layout
+
+\begin_layout Plain Layout
+
+library(MASS)
+\end_layout
+
+\begin_layout Plain Layout
+
+library(lattice)
+\end_layout
+
+\begin_layout Plain Layout
+
+library(olsrr)
+\end_layout
+
+\begin_layout Plain Layout
+
+library(car)
+\end_layout
+
+\begin_layout Plain Layout
+
+library(L1pack)
+\end_layout
+
+\begin_layout Plain Layout
+
+X = read.csv(file = "D:
+\backslash
+
+\backslash
+PG files
+\backslash
+
+\backslash
+Projects
+\backslash
+
+\backslash
+Regression-Analysis-Project-main
+\backslash
+
+\backslash
+population_drinking1.txt",
+\end_layout
+
+\begin_layout Plain Layout
+
+header=TRUE,sep = "
+\backslash
+t")
+\end_layout
+
+\begin_layout Plain Layout
+
+names(X) <- c(
+\begin_inset Quotes eld
+\end_inset
+
+Ind
+\begin_inset Quotes erd
+\end_inset
+
+,
+\begin_inset Quotes erd
+\end_inset
+
+Ind_1
+\begin_inset Quotes erd
+\end_inset
+
+,
+\begin_inset Quotes eld
+\end_inset
+
+Urban population
+\begin_inset Quotes erd
+\end_inset
+
+, 
+\begin_inset Quotes eld
+\end_inset
+
+Late births
+\begin_inset Quotes erd
+\end_inset
+
+, 
+\begin_inset Quotes eld
+\end_inset
+
+Wine consumption per capita
+\begin_inset Quotes erd
+\end_inset
+
+, 
+\begin_inset Quotes eld
+\end_inset
+
+Liquor consumption per capita
+\begin_inset Quotes erd
+\end_inset
+
+,
+\begin_inset Quotes eld
+\end_inset
+
+Cirrhosis death rate
+\begin_inset Quotes erd
+\end_inset
+
+)
+\end_layout
+
+\begin_layout Plain Layout
+
+head(X)
+\end_layout
+
+\begin_layout Plain Layout
+
+@
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+Here we have 
+\begin_inset Quotes eld
+\end_inset
+
+Cirrhosis death rate
+\begin_inset Quotes erd
+\end_inset
+
+ as the response and 
+\begin_inset Quotes eld
+\end_inset
+
+Urban population
+\begin_inset Quotes erd
+\end_inset
+
+, 
+\begin_inset Quotes eld
+\end_inset
+
+Late births
+\begin_inset Quotes erd
+\end_inset
+
+, 
+\begin_inset Quotes eld
+\end_inset
+
+Wine consumption per capita
+\begin_inset Quotes erd
+\end_inset
+
+, 
+\begin_inset Quotes eld
+\end_inset
+
+Liquor consumption per capita
+\begin_inset Quotes erd
+\end_inset
+
+ as the covariates.
+\end_layout
+
+\begin_layout Subsection*
+Type of the covariates
+\end_layout
+
+\begin_layout Standard
+To know type of each covariates, we use the str() function :-
+\end_layout
+
+\begin_layout Standard
+\begin_inset ERT
+status open
+
+\begin_layout Plain Layout
+
+<<comment=NA,echo=T,fig.width=8,fig.height=5.5,out.width='.8
+\backslash
+
+\backslash
+linewidth',warning=F,message=F,size='scriptsize'>>=
+\end_layout
+
+\begin_layout Plain Layout
+
+str(X)
+\end_layout
+
+\begin_layout Plain Layout
+
+@
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+So the dataset contains no factor covariate hence we can perform multiple
+ linear regression here.
+ For ease of indexing, we name the columns as 
+\begin_inset Quotes eld
+\end_inset
+
+I
+\begin_inset Quotes erd
+\end_inset
+
+, 
+\begin_inset Quotes eld
+\end_inset
+
+1
+\begin_inset Quotes erd
+\end_inset
+
+, 
+\begin_inset Quotes eld
+\end_inset
+
+A1
+\begin_inset Quotes erd
+\end_inset
+
+, 
+\begin_inset Quotes eld
+\end_inset
+
+A2
+\begin_inset Quotes erd
+\end_inset
+
+, 
+\begin_inset Quotes eld
+\end_inset
+
+A3
+\begin_inset Quotes erd
+\end_inset
+
+, 
+\begin_inset Quotes eld
+\end_inset
+
+A4
+\begin_inset Quotes erd
+\end_inset
+
+, 
+\begin_inset Quotes eld
+\end_inset
+
+Y
+\begin_inset Quotes erd
+\end_inset
+
+.
+\end_layout
+
+\begin_layout Standard
+\begin_inset ERT
+status open
+
+\begin_layout Plain Layout
+
+<<comment=NA,echo=T,fig.width=8,fig.height=5.5,out.width='.8
+\backslash
+
+\backslash
+linewidth',warning=F,message=F>>=
+\end_layout
+
+\begin_layout Plain Layout
+
+names(X) <- c("I","1","A1","A2","A3","A4","Y") 
+\end_layout
+
+\begin_layout Plain Layout
+
+@
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Subsection*
+5-number Summary of Covariates
+\end_layout
+
+\begin_layout Standard
+To get an idea of the values of each covariate we calculate the 5-number
+ summary for each of them :-
+\end_layout
+
+\begin_layout Standard
+\begin_inset ERT
+status open
+
+\begin_layout Plain Layout
+
+<<comment=NA,echo=T,fig.width=8,fig.height=5.5,out.width='.8
+\backslash
+
+\backslash
+linewidth',warning=F,message=F,size='footnotesize'>>=
+\end_layout
+
+\begin_layout Plain Layout
+
+summary(X[,-c(1,2)])
+\end_layout
+
+\begin_layout Plain Layout
+
+@
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Subsection*
+Pairwise Scatterplots
+\end_layout
+
+\begin_layout Standard
+To get an idea of the relationship between covariates and response, we make
+ pairwise scatterplots using pairs() function :-
+\end_layout
+
+\begin_layout Standard
+\begin_inset ERT
+status open
+
+\begin_layout Plain Layout
+
+<<comment=NA,echo=T,fig.width=8,fig.height=5.5,out.width='.8
+\backslash
+
+\backslash
+linewidth',warning=F,message=F>>=
+\end_layout
+
+\begin_layout Plain Layout
+
+pairs(X[,-c(1,2)])
+\end_layout
+
+\begin_layout Plain Layout
+
+@
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+This plot clearly indicates linear relationship between the covariates and
+ response also.
+ This might lead to the problem of multicollinearity which we will formally
+ diagnose.
+\end_layout
+
+\begin_layout Subsection*
+Correlation Between Covariates
+\end_layout
+
+\begin_layout Standard
+We calculate the correlation between the covariates and response to get
+ even better idea of linear dependence between them :-
+\begin_inset Newline newline
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+\begin_inset ERT
+status open
+
+\begin_layout Plain Layout
+
+<<comment=NA,echo=F,fig.width=8,fig.height=5.5,out.width='.8
+\backslash
+
+\backslash
+linewidth',warning=F,message=F>>=
+\end_layout
+
+\begin_layout Plain Layout
+
+cor(X[,-c(1,2,7)])
+\end_layout
+
+\begin_layout Plain Layout
+
+@
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+We can see that the correlations are high between many predictors which
+ can lead to problem of multicollinearity.
+\end_layout
+
+\begin_layout Subsection*
+Partial Residual Plots
+\end_layout
+
+\begin_layout Standard
+To get an idea of the nature of relationship between the covariates and
+ response, we make the partial residual plot for all the covariates :-
+\end_layout
+
+\begin_layout Standard
+\begin_inset ERT
+status open
+
+\begin_layout Plain Layout
+
+<<comment=NA,echo=T,fig.width=8,fig.height=5.5,out.width='.8
+\backslash
+
+\backslash
+linewidth',warning=F,message=F>>=
+\end_layout
+
+\begin_layout Plain Layout
+
+crPlots(lm(Y~A1+A2+A3+A4,data = X))
+\end_layout
+
+\begin_layout Plain Layout
+
+@
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Subsection*
+Conclusion
+\end_layout
+
+\begin_layout Standard
+The plot indicates the linear relationship between the covariates and response.
+\end_layout
+
+\begin_layout Standard
+Hence, we will fit the usual multiple linear regression model with no higher
+ order polynomial terms.
+\end_layout
+
+\begin_layout Standard
+Later we will see if other models with interaction terms are better or not.
+\end_layout
+
+\begin_layout Subsection*
+Boxplots of Covariates and Response
+\end_layout
+
+\begin_layout Standard
+We draw the boxplots for differnet covariates to get idea of presence of
+ outlier / high leavarage points :-
+\end_layout
+
+\begin_layout Standard
+\begin_inset ERT
+status open
+
+\begin_layout Plain Layout
+
+<<echo=T,fig.width=8,fig.height=5.5,out.width='.8
+\backslash
+
+\backslash
+linewidth',warning=F,message=F>>=
+\end_layout
+
+\begin_layout Plain Layout
+
+boxplot(X[,-c(1,2)])
+\end_layout
+
+\begin_layout Plain Layout
+
+@
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+Here also we get some indication of possible presence of those points.
+\end_layout
+
+\begin_layout Section
+Regression Analysis
+\end_layout
+
+\begin_layout Subsection
+Fitting a Linear Model
+\end_layout
+
+\begin_layout Subsection*
+Fitting a Linear Model to the Dataset
+\end_layout
+
+\begin_layout Standard
+We fit a linear model of the form :-
+\begin_inset Formula 
+\[
+\boldsymbol{Y}^{n\times1}=\boldsymbol{X}^{n\times p}\boldsymbol{\beta}^{p\times1}+\boldsymbol{\epsilon}^{n\times1}
+\]
+
+\end_inset
+
+where 
+\begin_inset Formula $n=46$
+\end_inset
+
+ (total number of observed responses) and 
+\begin_inset Formula $p=5$
+\end_inset
+
+ where columns of 
+\begin_inset Formula $\boldsymbol{X}=\begin{bmatrix}\boldsymbol{1}_{n} & \boldsymbol{x}_{1} & \boldsymbol{x}_{2} & \boldsymbol{x}_{3} & \boldsymbol{x}_{4}\end{bmatrix}$
+\end_inset
+
+ and 
+\begin_inset Formula $\boldsymbol{\beta}=\begin{pmatrix}\beta_{0} & \dotsb & \beta_{4}\end{pmatrix}$
+\end_inset
+
+ each corresponding to the 
+\begin_inset Formula $4$
+\end_inset
+
+ different covariates.
+\end_layout
+
+\begin_layout Standard
+We fit a linear model based on the given dataset in R and then verify the
+ different assumptions of it.
+\end_layout
+
+\begin_layout Subsection*
+Features of the fitted model
+\end_layout
+
+\begin_layout Standard
+We fit the linear model specified before in the dataset using lm() function
+ and to get an idea about the estimates we use the summary() function :-
+\end_layout
+
+\begin_layout Standard
+\begin_inset ERT
+status open
+
+\begin_layout Plain Layout
+
+<<comment=NA,echo=T,fig.width=8,fig.height=5.5,out.width='.8
+\backslash
+
+\backslash
+linewidth',warning=F,message=F,size='scriptsize'>>=
+\end_layout
+
+\begin_layout Plain Layout
+
+colnames(X)=c("I","1","A1","A2","A3","A4","Y")
+\end_layout
+
+\begin_layout Plain Layout
+
+attach(X)
+\end_layout
+
+\begin_layout Plain Layout
+
+reg <- lm(Y~A1+A2+A3+A4)
+\end_layout
+
+\begin_layout Plain Layout
+
+summary(reg)
+\end_layout
+
+\begin_layout Plain Layout
+
+@
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Subsection*
+Explanation of the fitted model
+\end_layout
+
+\begin_layout Standard
+As we can see only the coefficients 
+\begin_inset Formula $\beta_{2},\beta_{3}$
+\end_inset
+
+ for covariates 
+\begin_inset Quotes eld
+\end_inset
+
+A2
+\begin_inset Quotes erd
+\end_inset
+
+,
+\begin_inset Quotes eld
+\end_inset
+
+A3
+\begin_inset Quotes erd
+\end_inset
+
+ are statistically significant.
+\end_layout
+
+\begin_layout Standard
+This does not imply that other covariates are insignificant since there
+ maybe many problems that are hidden in the model.
+\end_layout
+
+\begin_layout Standard
+So, before concluding anything we verify all the assumptions of a linear
+ model.
+\end_layout
+
+\begin_layout Subsection*
+Obs vs Fitted Values
+\end_layout
+
+\begin_layout Standard
+We plot the observed vs fitted values to get some idea about prediction
+ :-
+\end_layout
+
+\begin_layout Standard
+\begin_inset ERT
+status open
+
+\begin_layout Plain Layout
+
+<<comment=NA,echo=T,fig.width=8,fig.height=5.5,out.width='.8
+\backslash
+
+\backslash
+linewidth',warning=F,message=F,size='footnotesize'>>=
+\end_layout
+
+\begin_layout Plain Layout
+
+plot(1:nrow(X),X$Y,type = "o",pch = 20,ylab = 
+\begin_inset Quotes eld
+\end_inset
+
+observed & predicted values
+\begin_inset Quotes erd
+\end_inset
+
+,xlab = 
+\begin_inset Quotes eld
+\end_inset
+
+Index
+\begin_inset Quotes erd
+\end_inset
+
+)
+\end_layout
+
+\begin_layout Plain Layout
+
+lines(1:nrow(X),reg$fitted.values,type = "o",pch = 20,col = "red",lty = 2)
+\end_layout
+
+\begin_layout Plain Layout
+
+abline(v = 1:nrow(X),lty = 2,col = rgb(0,1,0,alpha = 0.3))
+\end_layout
+
+\begin_layout Plain Layout
+
+legend("topleft",legend = c("Obs","Pred"),fill = c("black","red"))
+\end_layout
+
+\begin_layout Plain Layout
+
+@
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+The fit is good except a few observations.
+\end_layout
+
+\begin_layout Standard
+There may be many reasons for this which we will eventually look into.
+\end_layout
+
+\begin_layout Standard
+\begin_inset Separator plain
+\end_inset
+
+
+\end_layout
+
+\begin_layout Subsection
+Checking Model Assumptions
+\end_layout
+
+\begin_layout Subsection*
+QQ-plot of residuals
+\end_layout
+
+\begin_layout Standard
+We now plot the sorted residuals (quantiles) against the population quantiles
+ of a normal distribution :-
+\end_layout
+
+\begin_layout Standard
+\begin_inset ERT
+status open
+
+\begin_layout Plain Layout
+
+<<comment=NA,echo=T,fig.width=8,fig.height=5.5,out.width='.8
+\backslash
+
+\backslash
+linewidth',warning=F,message=F>>=
+\end_layout
+
+\begin_layout Plain Layout
+
+resi<-residuals(reg)
+\end_layout
+
+\begin_layout Plain Layout
+
+qqnorm(resi,ylab="Residuals",main="")
+\end_layout
+
+\begin_layout Plain Layout
+
+qqline(resi)
+\end_layout
+
+\begin_layout Plain Layout
+
+@
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+We can see the qq-plot indicates ligh tailed residuals with possible deviation
+ from normality.
+\end_layout
+
+\begin_layout Standard
+There maybe some outlier points present which we will verify later.
+\end_layout
+
+\begin_layout Subsection*
+Shapiro-Wilk Test
+\end_layout
+
+\begin_layout Standard
+We test the following hypothesis 
+\begin_inset Formula $H_{0}:\text{ residuals are normally distributed}$
+\end_inset
+
+ against 
+\begin_inset Formula $H_{1}:H_{0}\text{ is false}$
+\end_inset
+
+ using Shapiro-Wilk test in R as :-
+\end_layout
+
+\begin_layout Standard
+\begin_inset ERT
+status open
+
+\begin_layout Plain Layout
+
+<<comment=NA,echo=T,fig.width=8,fig.height=5.5,out.width='.8
+\backslash
+
+\backslash
+linewidth',warning=F,message=F>>=
+\end_layout
+
+\begin_layout Plain Layout
+
+shapiro.test(resi)
+\end_layout
+
+\begin_layout Plain Layout
+
+@
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+Though the p-value is more than 
+\begin_inset Formula $0.1$
+\end_inset
+
+ but this doesn't give strong evidence in favour of 
+\begin_inset Formula $H_{0}$
+\end_inset
+
+ so we will further check for presence of correlation between the errors
+ and other issues also.
+\end_layout
+
+\begin_layout Subsection*
+Checking Homoskedasticity Assumptions
+\end_layout
+
+\begin_layout Standard
+First to check homoskedasticity assumption, we make the residuals 
+\begin_inset Formula $\left(\widehat{\varepsilon}\right)$
+\end_inset
+
+ vs fitted 
+\begin_inset Formula $\left(\widehat{y}\right)$
+\end_inset
+
+ plots :-
+\end_layout
+
+\begin_layout Standard
+\begin_inset ERT
+status open
+
+\begin_layout Plain Layout
+
+<<comment=NA,echo=T,fig.width=8,fig.height=5.5,out.width='.8
+\backslash
+
+\backslash
+linewidth',warning=F,message=F>>=
+\end_layout
+
+\begin_layout Plain Layout
+
+plot(fitted(reg),residuals(reg),xlab="Fitted",ylab="Residuals")
+\end_layout
+
+\begin_layout Plain Layout
+
+abline(h=0)
+\end_layout
+
+\begin_layout Plain Layout
+
+@
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+We can see the plot doesn't give indication of presence of heteroskedasticity,
+ hence we will perform confirmatory tests.
+\end_layout
+
+\begin_layout Standard
+https://online.stat.psu.edu/stat462/node/117/#:~:text=When%20conducting%20a%20resid
+ual%20analysis,unequal%20error%20variances%2C%20and%20outliers.
+\end_layout
+
+\begin_layout Subsection*
+\begin_inset Formula $b_{i}$
+\end_inset
+
+ vs 
+\begin_inset Formula $\widehat{y}_{i}$
+\end_inset
+
+ plot
+\end_layout
+
+\begin_layout Standard
+A standard technique to detect presence of heteroskedasticity is to plot
+ the quantities 
+\begin_inset Formula $b_{i}=\frac{e_{i}^{2}}{1-h_{i}}$
+\end_inset
+
+ against the fitted values 
+\begin_inset Formula $\widehat{y}_{i}$
+\end_inset
+
+.
+\end_layout
+
+\begin_layout Standard
+We make the plot using R :-
+\end_layout
+
+\begin_layout Standard
+\begin_inset ERT
+status open
+
+\begin_layout Plain Layout
+
+<<comment=NA,echo=T,fig.width=8,fig.height=5.5,out.width='.8
+\backslash
+
+\backslash
+linewidth',warning=F,message=F>>=
+\end_layout
+
+\begin_layout Plain Layout
+
+A = as.matrix(X[,-1])
+\end_layout
+
+\begin_layout Plain Layout
+
+H = A%*%solve(t(A)%*%A)%*%t(A)
+\end_layout
+
+\begin_layout Plain Layout
+
+H_i = diag(H)
+\end_layout
+
+\begin_layout Plain Layout
+
+e_i = residuals(reg)
+\end_layout
+
+\begin_layout Plain Layout
+
+b_i = e_i^2/(1-H_i)
+\end_layout
+
+\begin_layout Plain Layout
+
+plot(fitted(reg),b_i,pch = 20,main = bquote("Plot of" ~ b[i]^2 ~ "vs fitted
+ values"),xlab = "",ylab = "")
+\end_layout
+
+\begin_layout Plain Layout
+
+@
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+This plot gives no indication of any heteroskedasticity present in the residuals.
+\end_layout
+
+\begin_layout Subsection*
+Breusch-Pagan Test
+\end_layout
+
+\begin_layout Standard
+We perform the Breusch–Pagan test for testing the homoskedasticity assumptions
+ using R :-
+\end_layout
+
+\begin_layout Standard
+\begin_inset ERT
+status open
+
+\begin_layout Plain Layout
+
+<<comment=NA,echo=T,fig.width=8,fig.height=5.5,out.width='.8
+\backslash
+
+\backslash
+linewidth',warning=F,message=F>>=
+\end_layout
+
+\begin_layout Plain Layout
+
+library(lmtest)
+\end_layout
+
+\begin_layout Plain Layout
+
+bptest(reg)
+\end_layout
+
+\begin_layout Plain Layout
+
+@
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+We can see that the p-value of the outcome is satisfactorily high so we
+ can safely assume the error variances to be equal.
+\end_layout
+
+\begin_layout Subsection*
+ACF plot
+\end_layout
+
+\begin_layout Standard
+If the errors in the model are truely independent, then we will expect the
+ sample autocorrelation coefficients for different lags 
+\begin_inset Formula $k$
+\end_inset
+
+ to be insignificant.
+\end_layout
+
+\begin_layout Standard
+\begin_inset ERT
+status open
+
+\begin_layout Plain Layout
+
+<<comment=NA,echo=T,fig.width=6,fig.height=4.5,out.width='.8
+\backslash
+
+\backslash
+linewidth',warning=F,message=F,size = 'scriptsize'>>=
+\end_layout
+
+\begin_layout Plain Layout
+
+acf(resi,ylab = 
+\begin_inset Quotes eld
+\end_inset
+
+
+\begin_inset Quotes erd
+\end_inset
+
+,xlab = 
+\begin_inset Quotes eld
+\end_inset
+
+
+\begin_inset Quotes erd
+\end_inset
+
+,main = 
+\begin_inset Quotes eld
+\end_inset
+
+
+\begin_inset Quotes erd
+\end_inset
+
+)
+\end_layout
+
+\begin_layout Plain Layout
+
+title(xlab="Lag", ylab="ACF", line=2)
+\end_layout
+
+\begin_layout Plain Layout
+
+@
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+This plot clearly gives indication of no presence of any type of correlation
+ between the residuals.
+\end_layout
+
+\begin_layout Subsection*
+PACF plot
+\end_layout
+
+\begin_layout Standard
+Similarly, we plot the sample partial autocorrelation coefficients for different
+ lags and got the same kind of observations indicating no presence of correlatio
+ns.
+\end_layout
+
+\begin_layout Standard
+\begin_inset ERT
+status open
+
+\begin_layout Plain Layout
+
+<<comment=NA,echo=T,fig.width=6,fig.height=5,out.width='.8
+\backslash
+
+\backslash
+linewidth',warning=F,message=F>>=
+\end_layout
+
+\begin_layout Plain Layout
+
+pacf(resi,ylab = 
+\begin_inset Quotes eld
+\end_inset
+
+
+\begin_inset Quotes erd
+\end_inset
+
+,xlab = 
+\begin_inset Quotes eld
+\end_inset
+
+
+\begin_inset Quotes erd
+\end_inset
+
+,main = 
+\begin_inset Quotes eld
+\end_inset
+
+
+\begin_inset Quotes erd
+\end_inset
+
+)
+\end_layout
+
+\begin_layout Plain Layout
+
+title(xlab="Lag", ylab="PACF", line=2)
+\end_layout
+
+\begin_layout Plain Layout
+
+@
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Subsection*
+Durbin-Watson Test
+\end_layout
+
+\begin_layout Standard
+To test the null hypothesis 
+\begin_inset Formula $H_{0}:\text{ errors are uncorrelated }$
+\end_inset
+
+against 
+\begin_inset Formula $H_{1}:\text{ errors are correlated}$
+\end_inset
+
+, we perform Durbin-Watson test which gives the following results :-
+\end_layout
+
+\begin_layout Standard
+\begin_inset ERT
+status open
+
+\begin_layout Plain Layout
+
+<<comment=NA,echo=T,fig.width=6,fig.height=5,out.width='.8
+\backslash
+
+\backslash
+linewidth',warning=F,message=F,size = 'scriptsize'>>=
+\end_layout
+
+\begin_layout Plain Layout
+
+require(lmtest)
+\end_layout
+
+\begin_layout Plain Layout
+
+dwtest(Y~A1+A2+A3+A4,data=X)
+\end_layout
+
+\begin_layout Plain Layout
+
+@
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+Since the test gives high p-value we can accept 
+\begin_inset Formula $H_{0}$
+\end_inset
+
+ hence the assumption of uncorrelated residuals can be assumed to be satishfied.
+\end_layout
+
+\begin_layout Subsection*
+Breusch–Godfrey test
+\end_layout
+
+\begin_layout Standard
+To check whether residuals are uncorrelated for higher orders, we perform
+ the Breusch–Godfrey test upto order 20.
+\end_layout
+
+\begin_layout Standard
+\begin_inset ERT
+status open
+
+\begin_layout Plain Layout
+
+<<comment=NA,echo=T,fig.width=6,fig.height=5,out.width='.8
+\backslash
+
+\backslash
+linewidth',warning=F,message=F,size = 'scriptsize'>>=
+\end_layout
+
+\begin_layout Plain Layout
+
+require(lmtest)
+\end_layout
+
+\begin_layout Plain Layout
+
+bgtest(reg,order = 20)
+\end_layout
+
+\begin_layout Plain Layout
+
+@
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+Here also the p-value is fairly high favouring the null assumption.
+\end_layout
+
+\begin_layout Subsection
+Detecting Influential Points
+\end_layout
+
+\begin_layout Subsection*
+Hat Matrix Diagonals
+\end_layout
+
+\begin_layout Standard
+To detect high leverage points, we compute the hat matrix diagonals 
+\begin_inset Formula $h_{i}$
+\end_inset
+
+ of the matrix 
+\begin_inset Formula $\boldsymbol{H}=\boldsymbol{X}\left(\boldsymbol{X}^{T}\boldsymbol{X}\right)^{-1}\boldsymbol{X}^{T}$
+\end_inset
+
+ :-
+\end_layout
+
+\begin_layout Standard
+\begin_inset ERT
+status open
+
+\begin_layout Plain Layout
+
+<<comment=NA,echo=T,fig.width=6,fig.height=5,out.width='.8
+\backslash
+
+\backslash
+linewidth',warning=F,message=F,size='footnotesize'>>=
+\end_layout
+
+\begin_layout Plain Layout
+
+hat_d <- hatvalues(reg)
+\end_layout
+
+\begin_layout Plain Layout
+
+head(sort(hat_d,dec=TRUE))
+\end_layout
+
+\begin_layout Plain Layout
+
+@
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+We find out if there is any diagonal element with value 
+\begin_inset Formula $>\frac{2p}{n}$
+\end_inset
+
+ as they should be looked at more closely.
+\end_layout
+
+\begin_layout Standard
+\begin_inset ERT
+status open
+
+\begin_layout Plain Layout
+
+<<comment=NA,echo=T,fig.width=6,fig.height=5,out.width='.8
+\backslash
+
+\backslash
+linewidth',warning=F,message=F,size='footnotesize'>>=
+\end_layout
+
+\begin_layout Plain Layout
+
+n = nrow(X);p = 5
+\end_layout
+
+\begin_layout Plain Layout
+
+hat_d[hat_d > 2*(p/n)]
+\end_layout
+
+\begin_layout Plain Layout
+
+@
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+Hence we will apply other procedures also to confirm whether these points
+ are influential or not.
+\end_layout
+
+\begin_layout Subsection*
+Externally Studentized Residuals
+\end_layout
+
+\begin_layout Standard
+We plot the externally studentized residuals using the formula 
+\begin_inset Formula $t_{i}^{2}=r_{i}^{2}\left(\frac{n-p-1}{n-p-r_{i}^{2}}\right)$
+\end_inset
+
+ :-
+\end_layout
+
+\begin_layout Standard
+\begin_inset ERT
+status open
+
+\begin_layout Plain Layout
+
+<<comment=NA,echo=T,fig.width=6,fig.height=4.5,out.width='.8
+\backslash
+
+\backslash
+linewidth',warning=F,message=F,size='scriptsize'>>=
+\end_layout
+
+\begin_layout Plain Layout
+
+stud <- rstudent(reg)
+\end_layout
+
+\begin_layout Plain Layout
+
+plot(stud,ylim = c(-3,3),pch=20,col = 
+\begin_inset Quotes eld
+\end_inset
+
+blue
+\begin_inset Quotes erd
+\end_inset
+
+)
+\end_layout
+
+\begin_layout Plain Layout
+
+abline(h=c(0))
+\end_layout
+
+\begin_layout Plain Layout
+
+@
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+If the assumptions are correct i.e.
+ 
+\begin_inset Formula $\boldsymbol{\epsilon}\sim N_{n}\left(\boldsymbol{0},\sigma^{2}\boldsymbol{I}\right)$
+\end_inset
+
+ then we should get that 
+\begin_inset Formula $t_{i}\sim t_{n-p-1}$
+\end_inset
+
+.
+\end_layout
+
+\begin_layout Standard
+Hence the significant externally studentized residuals will have values
+\begin_inset Formula $\left|t_{i}\right|>t_{n-p-1;\frac{\alpha}{2}}\iff t_{i}^{2}>F_{n-p-1;\alpha}$
+\end_inset
+
+ :-
+\end_layout
+
+\begin_layout Standard
+\begin_inset ERT
+status open
+
+\begin_layout Plain Layout
+
+<<comment=NA,echo=T,fig.width=6,fig.height=4.5,out.width='.8
+\backslash
+
+\backslash
+linewidth',warning=F,message=F,size='scriptsize'>>=
+\end_layout
+
+\begin_layout Plain Layout
+
+ols_plot_resid_stud_fit(reg)
+\end_layout
+
+\begin_layout Plain Layout
+
+@
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+We can see from the plot that one residual is significant hence we treat
+ that as an outlier.
+\end_layout
+
+\begin_layout Subsection*
+DFBETAS
+\end_layout
+
+\begin_layout Standard
+After outliers , we check for presence of high leavarage points, which can
+ be detected using DFBETAS measure for different parameters 
+\begin_inset Formula $DFBETAS_{ij}=\frac{\widehat{\beta}_{j}-\widehat{\beta}\left(i\right)_{j}}{S\left(i\right)\sqrt{\sum\limits _{i}c_{j+1,i}^{2}}}$
+\end_inset
+
+ where 
+\begin_inset Formula $\boldsymbol{C}=\left(\left(c_{ij}\right)\right)=\left(\boldsymbol{X}^{T}\boldsymbol{X}\right)^{-1}\boldsymbol{X}$
+\end_inset
+
+ .
+\end_layout
+
+\begin_layout Standard
+We will consider the points for which 
+\begin_inset Formula $\left|DFBETAS_{ij}\right|>\frac{2}{\sqrt{n}}$
+\end_inset
+
+.
+ In the next slide we plot the values for all the 
+\begin_inset Formula $5$
+\end_inset
+
+ coefficients 
+\begin_inset Formula $\beta_{i},i=0,...,4$
+\end_inset
+
+.
+\end_layout
+
+\begin_layout Standard
+\begin_inset ERT
+status open
+
+\begin_layout Plain Layout
+
+<<comment=NA,echo=T,fig.width=6,fig.height=5,out.width='.8
+\backslash
+
+\backslash
+linewidth',warning=F,message=F,size='footnotesize'>>=
+\end_layout
+
+\begin_layout Plain Layout
+
+par(mfrow = c(2,3))
+\end_layout
+
+\begin_layout Plain Layout
+
+DFBETAS = dfbetas(reg)
+\end_layout
+
+\begin_layout Plain Layout
+
+for(i in 1:5)
+\end_layout
+
+\begin_layout Plain Layout
+
+{
+\end_layout
+
+\begin_layout Plain Layout
+
+  plot(DFBETAS[,i],main=bquote("DFBETAS for" ~ beta[.(i-1)]),ylab="",ylim=c(-1.5,1.
+5),xlab="",pch=20)
+\end_layout
+
+\begin_layout Plain Layout
+
+  abline(h=c(-2/sqrt(n),2/sqrt(n)))
+\end_layout
+
+\begin_layout Plain Layout
+
+  ind = which(abs(DFBETAS[,i]) > 2/sqrt(n)) # beta_0
+\end_layout
+
+\begin_layout Plain Layout
+
+  text = text(ind,DFBETAS[ind,i],pos = 3,labels = ind)
+\end_layout
+
+\begin_layout Plain Layout
+
+}
+\end_layout
+
+\begin_layout Plain Layout
+
+@
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Subsection*
+DFFITS
+\end_layout
+
+\begin_layout Standard
+To notice the change in fitted values, we plot the DFFITS values for all
+ the points where 
+\begin_inset Formula $DFFITS_{i}=t_{i}\left(\frac{h_{i}}{1-h_{i}}\right)^{\nicefrac{1}{2}}$
+\end_inset
+
+ and we will check for the points for which 
+\begin_inset Formula $\left|DFFITS_{i}\right|>2\sqrt{\frac{p}{n}}$
+\end_inset
+
+.
+\end_layout
+
+\begin_layout Standard
+\begin_inset ERT
+status open
+
+\begin_layout Plain Layout
+
+<<comment=NA,echo=T,fig.width=6,fig.height=5,out.width='.8
+\backslash
+
+\backslash
+linewidth',warning=F,message=F,size='footnotesize'>>=
+\end_layout
+
+\begin_layout Plain Layout
+
+ols_plot_dffits(reg) 
+\end_layout
+
+\begin_layout Plain Layout
+
+@
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Subsection*
+COVRATIO
+\end_layout
+
+\begin_layout Standard
+We also plot the COVRATIO values which are defined as 
+\begin_inset Formula 
+\[
+COVRATIO_{i}=\left(\frac{n-p-1}{n-p}+\frac{t_{i}^{2}}{n-p}\right)^{-p}\left(1-h_{i}\right)^{-1}
+\]
+
+\end_inset
+
+ 
+\end_layout
+
+\begin_layout Standard
+and we consider the points to have high fluence for which 
+\begin_inset Formula $\left|COVRATIO-1\right|>\frac{3p}{n}$
+\end_inset
+
+.
+\end_layout
+
+\begin_layout Standard
+\begin_inset ERT
+status open
+
+\begin_layout Plain Layout
+
+<<comment=NA,echo=T,fig.width=6,fig.height=5,out.width='.8
+\backslash
+
+\backslash
+linewidth',warning=F,message=F,size='footnotesize'>>=
+\end_layout
+
+\begin_layout Plain Layout
+
+COVRATIO = covratio(reg)
+\end_layout
+
+\begin_layout Plain Layout
+
+plot(abs(COVRATIO-1),ylab=expression(abs(COVRATIO-1)),pch = 20)
+\end_layout
+
+\begin_layout Plain Layout
+
+abline(h = 3*p/n)
+\end_layout
+
+\begin_layout Plain Layout
+
+ind = which(abs(COVRATIO-1) >= 3*p/n)
+\end_layout
+
+\begin_layout Plain Layout
+
+text(ind,abs(COVRATIO[ind]-1),pos = 1,labels = ind)
+\end_layout
+
+\begin_layout Plain Layout
+
+@
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Subsection*
+Cook's 
+\begin_inset Formula $D$
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+Lastly, we calculate the Cook's Distance 
+\begin_inset Formula $D_{i}=\frac{\left(\widehat{\beta}\left(i\right)-\widehat{\beta}\right)^{T}\boldsymbol{X^{T}X}\left(\widehat{\beta}\left(i\right)-\widehat{\beta}\right)}{pS^{2}}=r_{i}^{2}\frac{h_{i}}{p\left(1-h_{i}\right)}$
+\end_inset
+
+ for all the 
+\begin_inset Formula $n$
+\end_inset
+
+ points.
+ 
+\end_layout
+
+\begin_layout Standard
+We flag the points as suspicious for which 
+\begin_inset Formula $D_{i}>\frac{4}{n}$
+\end_inset
+
+ here 
+\begin_inset Formula $n=46,p=5$
+\end_inset
+
+.
+ Whose value equals to 
+\begin_inset Formula $0.087$
+\end_inset
+
+.
+\end_layout
+
+\begin_layout Standard
+We plot the values and see if such suspicious points exists or not.
+\end_layout
+
+\begin_layout Standard
+\begin_inset ERT
+status open
+
+\begin_layout Plain Layout
+
+<<comment=NA,echo=T,fig.width=6,fig.height=5,out.width='.8
+\backslash
+
+\backslash
+linewidth',warning=F,message=F,size='footnotesize'>>=
+\end_layout
+
+\begin_layout Plain Layout
+
+COOKSD = cooks.distance(reg)
+\end_layout
+
+\begin_layout Plain Layout
+
+plot(COOKSD,pch=20)
+\end_layout
+
+\begin_layout Plain Layout
+
+abline(h = 3*mean(COOKSD))
+\end_layout
+
+\begin_layout Plain Layout
+
+ind = which(COOKSD > 3*mean(COOKSD)) # beta_0
+\end_layout
+
+\begin_layout Plain Layout
+
+text = text(ind,COOKSD[ind],pos = 1,labels = ind)
+\end_layout
+
+\begin_layout Plain Layout
+
+@
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+We can clearly notice that the points 12,20,30,36 have significant values
+ of 
+\begin_inset Formula $D_{i}$
+\end_inset
+
+.
+ So we will investigate them further.
+\end_layout
+
+\begin_layout Subsection*
+Conclusion
+\end_layout
+
+\begin_layout Standard
+\align center
+From all the diagnostics performed for finding influential observations,
+ we can make the following table of our findings :-
+\begin_inset Newline newline
+\end_inset
+
+
+\begin_inset Tabular
+<lyxtabular version="3" rows="7" columns="2">
+<features tabularvalignment="middle">
+<column alignment="center" valignment="top">
+<column alignment="center" valignment="top">
+<row>
+<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+Diagnostic Measures
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" rightline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+Points Detected
+\end_layout
+
+\end_inset
+</cell>
+</row>
+<row>
+<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+\begin_inset Formula $h_{i}$
+\end_inset
+
+
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" rightline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+\begin_inset Formula $12,20,36,38$
+\end_inset
+
+
+\end_layout
+
+\end_inset
+</cell>
+</row>
+<row>
+<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+\begin_inset Formula $t_{i}$
+\end_inset
+
+
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" rightline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+\begin_inset Formula $12$
+\end_inset
+
+
+\end_layout
+
+\end_inset
+</cell>
+</row>
+<row>
+<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+\begin_inset Formula $DFBETAS$
+\end_inset
+
+
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" rightline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+\begin_inset Formula $12,15,17,18,20,28,30,36$
+\end_inset
+
+
+\end_layout
+
+\end_inset
+</cell>
+</row>
+<row>
+<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+\begin_inset Formula $DFFITS$
+\end_inset
+
+
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" rightline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+\begin_inset Formula $12,20,30,36$
+\end_inset
+
+
+\end_layout
+
+\end_inset
+</cell>
+</row>
+<row>
+<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+\begin_inset Formula $COVRATIO$
+\end_inset
+
+
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" rightline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+\begin_inset Formula $24,36,38$
+\end_inset
+
+
+\end_layout
+
+\end_inset
+</cell>
+</row>
+<row>
+<cell alignment="center" valignment="top" topline="true" bottomline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+\begin_inset Formula $Cook's\text{ }D$
+\end_inset
+
+
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" bottomline="true" leftline="true" rightline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+\begin_inset Formula $12,20,30,36$
+\end_inset
+
+
+\end_layout
+
+\end_inset
+</cell>
+</row>
+</lyxtabular>
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+Hence, from the table, we conclude the points 
+\begin_inset Formula $12,20,30,36$
+\end_inset
+
+ to be influential points and we we will later remove them from the model
+ and see the changes occuring in all aspects of the fitted linear models.
+\end_layout
+
+\begin_layout Subsection
+Remedies For Influential Points
+\end_layout
+
+\begin_layout Subsection*
+Removing Influential Points
+\end_layout
+
+\begin_layout Standard
+We remove the influential points and then again fit a linear model with
+ all the covariates and write the summary output of the fitted model here
+ :-
+\end_layout
+
+\begin_layout Standard
+\begin_inset ERT
+status open
+
+\begin_layout Plain Layout
+
+<<comment=NA,echo=T,fig.width=6,fig.height=5,out.width='.8
+\backslash
+
+\backslash
+linewidth',warning=F,message=F,size='scriptsize'>>=
+\end_layout
+
+\begin_layout Plain Layout
+
+summary(lm(Y~A1+A2+A3+A4,data=X[-c(12,20,30,36),]))
+\end_layout
+
+\begin_layout Plain Layout
+
+@
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+This model has increased value of 
+\begin_inset Formula $R_{adj}^{2}=0.8045$
+\end_inset
+
+.
+\end_layout
+
+\begin_layout Subsection*
+Improvements in the fitted model
+\end_layout
+
+\begin_layout Standard
+From the output,we can see that the 
+\begin_inset Formula $R_{adj}^{2}$
+\end_inset
+
+ value has increased from that of the full model which was 
+\begin_inset Formula $=0.7954$
+\end_inset
+
+.
+\end_layout
+
+\begin_layout Standard
+Also we can see that the model indicates the estimates of the intercept
+ term 
+\begin_inset Formula $\left(\widehat{\beta}_{0}\right)$
+\end_inset
+
+, variables A1 & A3 
+\begin_inset Formula $\left(\widehat{\beta}_{1},\widehat{\beta}_{3}\right)$
+\end_inset
+
+to be signifcant.
+\end_layout
+
+\begin_layout Standard
+Whether covariate A2 is signifcant or not, will be verified later.
+\end_layout
+
+\begin_layout Subsection*
+Histogram of Residuals
+\end_layout
+
+\begin_layout Standard
+We also plot the histogram of the residual values and can notice it's symmetric
+ about 0 and seems to be normally distributed :-
+\end_layout
+
+\begin_layout Standard
+\begin_inset ERT
+status open
+
+\begin_layout Plain Layout
+
+<<comment=NA,echo=T,fig.width=6,fig.height=4,out.width='.8
+\backslash
+
+\backslash
+linewidth',warning=F,message=F,size='footnotesize'>>=
+\end_layout
+
+\begin_layout Plain Layout
+
+reg_out = lm(Y~A1+A2+A3+A4,data = X[-c(12,20,30,36),])
+\end_layout
+
+\begin_layout Plain Layout
+
+hist(rstandard(reg_out),breaks = 5,main = 
+\begin_inset Quotes eld
+\end_inset
+
+Histogram Of Residual Values
+\begin_inset Quotes erd
+\end_inset
+
+) 
+\end_layout
+
+\begin_layout Plain Layout
+
+@
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Subsection*
+QQ-plot
+\end_layout
+
+\begin_layout Standard
+For checking the assumptions for the residuals we again make the quantile-quanti
+le plot of the standardized residuals :-
+\end_layout
+
+\begin_layout Standard
+\begin_inset ERT
+status open
+
+\begin_layout Plain Layout
+
+<<comment=NA,echo=T,fig.width=6,fig.height=4,out.width='.8
+\backslash
+
+\backslash
+linewidth',warning=F,message=F,size='footnotesize'>>=
+\end_layout
+
+\begin_layout Plain Layout
+
+reg_out = lm(Y~A1+A3+A4,data = X[-c(12,20,30,36),])
+\end_layout
+
+\begin_layout Plain Layout
+
+qqnorm(rstandard(reg_out)) 
+\end_layout
+
+\begin_layout Plain Layout
+
+qqline(rstandard(reg_out)) 
+\end_layout
+
+\begin_layout Plain Layout
+
+@
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Subsection*
+Checking Other Assumptions
+\end_layout
+
+\begin_layout Standard
+We again perform both the Shapiro-Wilk test and Durbin-Watson test for checking
+ normality and presence of correlation between the residuals, respectively.
+ We write down the observations in the following table :-
+\end_layout
+
+\begin_layout Standard
+\align center
+\begin_inset Tabular
+<lyxtabular version="3" rows="5" columns="3">
+<features tabularvalignment="middle">
+<column alignment="center" valignment="middle" width="3cm">
+<column alignment="center" valignment="middle" width="3cm">
+<column alignment="center" valignment="middle" width="3cm">
+<row>
+<cell alignment="center" valignment="top" topline="true" bottomline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+Tests
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" bottomline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+Model with influential points
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" bottomline="true" leftline="true" rightline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+Model without influential points
+\end_layout
+
+\end_inset
+</cell>
+</row>
+<row>
+<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+Shapiro-Wilk
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+0.1133
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" rightline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+0.8429
+\end_layout
+
+\end_inset
+</cell>
+</row>
+<row>
+<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+Durbin-Watson
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+0.9734
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" rightline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+0.6943
+\end_layout
+
+\end_inset
+</cell>
+</row>
+<row>
+<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+Breusch-Pagan
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+0.6105
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" rightline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+0.5742
+\end_layout
+
+\end_inset
+</cell>
+</row>
+<row>
+<cell alignment="center" valignment="top" topline="true" bottomline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+Breusch-Godfrey
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" bottomline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+0.2033
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" bottomline="true" leftline="true" rightline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+0.7973
+\end_layout
+
+\end_inset
+</cell>
+</row>
+</lyxtabular>
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+Hence we can see considerable improvement in the normality assumptions of
+ the residuals whereas the uncorrelated & homoskedasticity assumptions are
+ more or less remains equally acceptable.
+\end_layout
+
+\begin_layout Standard
+Hence, the model can be considered to be better than the previous model
+ as a result of removing the influential points.
+\end_layout
+
+\begin_layout Subsection
+Collinearity
+\end_layout
+
+\begin_layout Subsection*
+Multicollinearity
+\end_layout
+
+\begin_layout Standard
+Next we consider the problem of multicollinearity that may be present in
+ our dataset as suspected from the pairwise scatterplots.
+\end_layout
+
+\begin_layout Standard
+We calculate the condition number for the scaled and centred model matrix
+ 
+\begin_inset Formula $\boldsymbol{X}^{*}$
+\end_inset
+
+ which is 
+\begin_inset Formula $\kappa\left(\boldsymbol{X}^{*}\right)=\sqrt{\frac{\lambda_{max}}{\lambda_{min}}}$
+\end_inset
+
+ where 
+\begin_inset Formula $\lambda_{i}$
+\end_inset
+
+'s are the eigenvalues of 
+\begin_inset Formula $\boldsymbol{X}^{*T}\boldsymbol{X}^{*}=\boldsymbol{R}_{xx}$
+\end_inset
+
+.
+ We calculate 
+\begin_inset Formula $\kappa\left(\boldsymbol{X}^{*}\right)$
+\end_inset
+
+ using R :-
+\end_layout
+
+\begin_layout Standard
+\begin_inset ERT
+status open
+
+\begin_layout Plain Layout
+
+<<comment=NA,echo=T,fig.width=6,fig.height=5,out.width='.8
+\backslash
+
+\backslash
+linewidth',warning=F,message=F,size='footnotesize'>>=
+\end_layout
+
+\begin_layout Plain Layout
+
+X_mdl = model.matrix(reg)[,-1]
+\end_layout
+
+\begin_layout Plain Layout
+
+kappa(scale(X_mdl))
+\end_layout
+
+\begin_layout Plain Layout
+
+@
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+Hence, the square of condition number 
+\begin_inset Formula $\kappa^{2}\left(\boldsymbol{X}^{*}\right)\approx74.379$
+\end_inset
+
+ is an upper bound for the VIFs which is quite large !
+\end_layout
+
+\begin_layout Subsection*
+VIF
+\end_layout
+
+\begin_layout Standard
+Now, to determine whether some covariate with corresponding column 
+\begin_inset Formula $\boldsymbol{x}_{j}$
+\end_inset
+
+, can be predicted accurately using other covariates or not, we compute
+ the variance inflation factors 
+\begin_inset Formula $\text{VIF}_{j}=\frac{1}{1-R_{j}^{2}}$
+\end_inset
+
+ where 
+\begin_inset Formula $R_{j}^{2}$
+\end_inset
+
+ is the coefficient of determination of the regression of 
+\begin_inset Formula $\boldsymbol{x}^{*\left(j\right)}$
+\end_inset
+
+ on the columns of 
+\begin_inset Formula $\boldsymbol{X}^{*\left(j\right)}$
+\end_inset
+
+.
+\end_layout
+
+\begin_layout Standard
+We calculate the 
+\begin_inset Formula $\text{VIF}_{j}$
+\end_inset
+
+ values for 
+\begin_inset Formula $j=1,2,3,4$
+\end_inset
+
+ in R :-
+\end_layout
+
+\begin_layout Standard
+\begin_inset ERT
+status open
+
+\begin_layout Plain Layout
+
+<<comment=NA,echo=T,fig.width=6,fig.height=5,out.width='.8
+\backslash
+
+\backslash
+linewidth',warning=F,message=F,size='footnotesize'>>=
+\end_layout
+
+\begin_layout Plain Layout
+
+require(
+\begin_inset Quotes eld
+\end_inset
+
+faraway
+\begin_inset Quotes erd
+\end_inset
+
+)
+\end_layout
+
+\begin_layout Plain Layout
+
+vif(lm(Y~A1+A2+A3+A4,data = X[-c(12,20,30,36),]))#high implies collinearity
+ 
+\end_layout
+
+\begin_layout Plain Layout
+
+@
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+For the variables A1 and A2, we can see that the VIF values are greater
+ than 
+\begin_inset Formula $5$
+\end_inset
+
+ and even close to 
+\begin_inset Formula $10$
+\end_inset
+
+! So we can interpret this as 
+\begin_inset Quotes eld
+\end_inset
+
+the standard error of 
+\begin_inset Formula $\widehat{\beta_{1}}$
+\end_inset
+
+ and 
+\begin_inset Formula $\widehat{\beta_{2}}$
+\end_inset
+
+ would be 
+\begin_inset Formula $\sqrt{9.26}\approx3.043$
+\end_inset
+
+ and 
+\begin_inset Formula $\sqrt{9.361}\approx3.059$
+\end_inset
+
+ times more (respectively) than it would have been without the presence
+ of collinearity
+\begin_inset Quotes erd
+\end_inset
+
+.
+\end_layout
+
+\begin_layout Subsection*
+Effect of Influential Points on Collinearity
+\end_layout
+
+\begin_layout Standard
+This is a very interesting observation that we have made in the dataset.
+\end_layout
+
+\begin_layout Standard
+If we remove the influential points and then calculate the VIF values, we
+ get :-
+\end_layout
+
+\begin_layout Standard
+\begin_inset ERT
+status open
+
+\begin_layout Plain Layout
+
+<<comment=NA,echo=T,fig.width=6,fig.height=5,out.width='.8
+\backslash
+
+\backslash
+linewidth',warning=F,message=F,size='footnotesize'>>=
+\end_layout
+
+\begin_layout Plain Layout
+
+require(
+\begin_inset Quotes eld
+\end_inset
+
+faraway
+\begin_inset Quotes erd
+\end_inset
+
+)
+\end_layout
+
+\begin_layout Plain Layout
+
+vif(lm(Y~A1+A2+A3+A4,data = X[-c(12,20,30,36),]))#high implies collinearity
+ 
+\end_layout
+
+\begin_layout Plain Layout
+
+@
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+But if we do the same without removing those points, we get :-
+\end_layout
+
+\begin_layout Standard
+\begin_inset ERT
+status open
+
+\begin_layout Plain Layout
+
+<<comment=NA,echo=T,fig.width=6,fig.height=5,out.width='.8
+\backslash
+
+\backslash
+linewidth',warning=F,message=F,size='footnotesize'>>=
+\end_layout
+
+\begin_layout Plain Layout
+
+require(
+\begin_inset Quotes eld
+\end_inset
+
+faraway
+\begin_inset Quotes erd
+\end_inset
+
+)
+\end_layout
+
+\begin_layout Plain Layout
+
+vif(lm(Y~A1+A2+A3+A4,data = X[]))#high implies collinearity 
+\end_layout
+
+\begin_layout Plain Layout
+
+@
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+So, as we can see the VIF values increased after removal of the influential
+ points.
+\end_layout
+
+\begin_layout Standard
+This is intuitive from the fact that actual linear dependence between the
+ covariates was being slightly nullified by the presence of such influential
+ points.
+\end_layout
+
+\begin_layout Subsection*
+Demonstrating Effect of Collinearity
+\end_layout
+
+\begin_layout Standard
+To demonstrate how collinearity can affect the estimates badly, we delibarately
+ introduce some random noise in the response observations 
+\begin_inset Formula $(\boldsymbol{\delta}\sim N\left(0,1\right))$
+\end_inset
+
+ and then fit a linear model and see the changes in the estimate.
+\end_layout
+
+\begin_layout Standard
+\begin_inset ERT
+status open
+
+\begin_layout Plain Layout
+
+<<comment=NA,echo=T,fig.width=6,fig.height=5,out.width='.8
+\backslash
+
+\backslash
+linewidth',warning=F,message=F,size='footnotesize'>>=
+\end_layout
+
+\begin_layout Plain Layout
+
+set.seed(2124)
+\end_layout
+
+\begin_layout Plain Layout
+
+lmod_per = lm(Y+10*rnorm(nrow(X)-4,s = 5) ~ A1+A2+A3+A4,data = X[-c(12,20,30,36)
+,])
+\end_layout
+
+\begin_layout Plain Layout
+
+reg$coefficients
+\end_layout
+
+\begin_layout Plain Layout
+
+lmod_per$coefficients
+\end_layout
+
+\begin_layout Plain Layout
+
+@
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+Hence, we can clearly see the how the estimates change a lot for introducing
+ random noise in the response.
+\end_layout
+
+\begin_layout Subsection
+Remedies For Collinearity
+\end_layout
+
+\begin_layout Subsection*
+Dealing with Collinearity
+\end_layout
+
+\begin_layout Standard
+To deal with the collinearity present in the dataset, we first try to remove
+ one of the correlated covariates 
+\begin_inset Quotes eld
+\end_inset
+
+A1
+\begin_inset Quotes erd
+\end_inset
+
+ or 
+\begin_inset Quotes eld
+\end_inset
+
+A2
+\begin_inset Quotes erd
+\end_inset
+
+ and see what improvements are observed in the variation inflation factors
+ :-
+\end_layout
+
+\begin_layout Standard
+\align center
+\begin_inset Tabular
+<lyxtabular version="3" rows="4" columns="3">
+<features tabularvalignment="middle">
+<column alignment="center" valignment="top">
+<column alignment="center" valignment="top">
+<column alignment="center" valignment="top">
+<row>
+<cell alignment="center" valignment="top" topline="true" bottomline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+Model
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" bottomline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+Condition Number 
+\begin_inset Formula $\left(\kappa\right)$
+\end_inset
+
+
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" bottomline="true" leftline="true" rightline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+\begin_inset Formula $R_{adj}^{2}$
+\end_inset
+
+
+\end_layout
+
+\end_inset
+</cell>
+</row>
+<row>
+<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+\begin_inset Formula $Y=\beta_{0}+\beta_{1}\text{A1}+\beta_{2}\text{A2}+\beta_{3}\text{A3}+\beta_{4}\text{A4}$
+\end_inset
+
+
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+\begin_inset Formula $8.512$
+\end_inset
+
+
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" rightline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+\begin_inset Formula $0.795$
+\end_inset
+
+
+\end_layout
+
+\end_inset
+</cell>
+</row>
+<row>
+<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+\begin_inset Formula $Y=\beta_{0}+\beta_{2}\text{A2}+\beta_{3}\text{A3}+\beta_{4}\text{A4}$
+\end_inset
+
+
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+\begin_inset Formula $5.625$
+\end_inset
+
+
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" rightline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+\begin_inset Formula $0.755$
+\end_inset
+
+
+\end_layout
+
+\end_inset
+</cell>
+</row>
+<row>
+<cell alignment="center" valignment="top" topline="true" bottomline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+\begin_inset Formula $Y=\beta_{0}+\beta_{1}\text{A1}+\beta_{3}\text{A3}+\beta_{4}\text{A4}$
+\end_inset
+
+
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" bottomline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+\begin_inset Formula $3.951$
+\end_inset
+
+
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" bottomline="true" leftline="true" rightline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+\begin_inset Formula $0.803$
+\end_inset
+
+
+\end_layout
+
+\end_inset
+</cell>
+</row>
+</lyxtabular>
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+We also check for other assumptions between the models :-
+\end_layout
+
+\begin_layout Standard
+\align center
+\begin_inset Tabular
+<lyxtabular version="3" rows="4" columns="4">
+<features tabularvalignment="middle">
+<column alignment="center" valignment="top">
+<column alignment="center" valignment="top">
+<column alignment="center" valignment="top">
+<column alignment="center" valignment="top">
+<row>
+<cell alignment="center" valignment="top" topline="true" bottomline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+Tests
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" bottomline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+Full Model
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" bottomline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+Without 
+\begin_inset Quotes eld
+\end_inset
+
+A1
+\begin_inset Quotes erd
+\end_inset
+
+
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" bottomline="true" leftline="true" rightline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+Without 
+\begin_inset Quotes eld
+\end_inset
+
+A2
+\begin_inset Quotes erd
+\end_inset
+
+
+\end_layout
+
+\end_inset
+</cell>
+</row>
+<row>
+<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+Shapiro-Wilk
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+0.1133
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+0.563
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" rightline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+0.2461
+\end_layout
+
+\end_inset
+</cell>
+</row>
+<row>
+<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+Durbin-Watson
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+0.9734
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+0.7376
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" rightline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+0.7638
+\end_layout
+
+\end_inset
+</cell>
+</row>
+<row>
+<cell alignment="center" valignment="top" topline="true" bottomline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+Breusch-Pagan
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" bottomline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+0.6105
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" bottomline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+0.3742
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" bottomline="true" leftline="true" rightline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+0.9423
+\end_layout
+
+\end_inset
+</cell>
+</row>
+</lyxtabular>
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Subsection*
+Dealing with Collinearity
+\end_layout
+
+\begin_layout Standard
+Hence, the model with covariates 
+\begin_inset Quotes eld
+\end_inset
+
+A1
+\begin_inset Quotes erd
+\end_inset
+
+, 
+\begin_inset Quotes eld
+\end_inset
+
+A3
+\begin_inset Quotes erd
+\end_inset
+
+, 
+\begin_inset Quotes eld
+\end_inset
+
+A4
+\begin_inset Quotes erd
+\end_inset
+
+ seems to be a much better model in terms of both prediction and accuracy
+ of the estimates of 
+\begin_inset Formula $\boldsymbol{\beta}$
+\end_inset
+
+.
+ Also if we calculate the VIF values for the last model, we get them to
+ be considerably small :-
+\end_layout
+
+\begin_layout Standard
+\begin_inset ERT
+status open
+
+\begin_layout Plain Layout
+
+<<comment=NA,echo=T,fig.width=6,fig.height=4,out.width='.8
+\backslash
+
+\backslash
+linewidth',warning=F,message=F,size='footnotesize'>>=
+\end_layout
+
+\begin_layout Plain Layout
+
+vif(reg_out)
+\end_layout
+
+\begin_layout Plain Layout
+
+@
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+This is also relatable from the fact that initially covariate 
+\begin_inset Quotes eld
+\end_inset
+
+A2
+\begin_inset Quotes erd
+\end_inset
+
+ had the maximum VIF value and the condition number also decreased significantly
+ due to its removal.
+\end_layout
+
+\begin_layout Subsection*
+Added Variable Plot
+\end_layout
+
+\begin_layout Standard
+For better understanding the contribution of a covariate in the regression
+ model, we make a scatter plot of 
+\begin_inset Formula $\boldsymbol{e}^{\left(i\right)}=\left(\boldsymbol{I}-\boldsymbol{P}_{i}\right)\boldsymbol{Y}$
+\end_inset
+
+ against 
+\begin_inset Formula $\left(\boldsymbol{I}-\boldsymbol{P}_{i}\right)\boldsymbol{x}^{\left(i\right)}$
+\end_inset
+
+ where 
+\begin_inset Formula $\boldsymbol{e}^{\left(i\right)}$
+\end_inset
+
+ are the residuals of the model with variable Ai excluded and 
+\begin_inset Formula $\boldsymbol{x}^{\left(i\right)}$
+\end_inset
+
+ is the column of observations of Ai.
+ This is also called the added variable plot.
+\end_layout
+
+\begin_layout Standard
+\begin_inset ERT
+status open
+
+\begin_layout Plain Layout
+
+<<comment=NA,echo=T,fig.width=6,fig.height=5,out.width='.8
+\backslash
+
+\backslash
+linewidth',warning=F,message=F,size='footnotesize'>>=
+\end_layout
+
+\begin_layout Plain Layout
+
+avPlots(lm(Y~A1+A2+A3+A4,data = X[-c(12,20,30,36),])) 
+\end_layout
+
+\begin_layout Plain Layout
+
+@
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Subsection*
+Conclusion
+\end_layout
+
+\begin_layout Standard
+From the 4 plots, we can see that slopes of the fitted lines for the added
+ variable plots of A1 & A3 are much more signifcant than other two plots
+ for A2 & A4.
+\end_layout
+
+\begin_layout Standard
+We can make some important conclusions from here.
+\end_layout
+
+\begin_layout Standard
+This indicates that once predictor A1, A3, A4 is included, A2 can be excluded
+ from the model for the high collinearity present between them.
+\end_layout
+
+\begin_layout Standard
+Similar can be said for A4.
+\end_layout
+
+\begin_layout Standard
+Now, for much better conclusions, we perform further model selection procedures
+ based on several criterias.
+\end_layout
+
+\begin_layout Standard
+\begin_inset Separator plain
+\end_inset
+
+
+\end_layout
+
+\begin_layout Subsection
+Model Selection
+\end_layout
+
+\begin_layout Subsection*
+Stepwise Selection
+\end_layout
+
+\begin_layout Standard
+We perform the stepwise selection algorithm which performs a forward selection
+ (FS) followed by a backward elimination (BE) using the AIC criterion and
+ get to an optimum model.
+\end_layout
+
+\begin_layout Standard
+We get the following sequence of models in the selection procedure :-
+\end_layout
+
+\begin_layout Standard
+\align center
+\begin_inset Tabular
+<lyxtabular version="3" rows="4" columns="2">
+<features tabularvalignment="middle">
+<column alignment="center" valignment="top">
+<column alignment="center" valignment="top">
+<row>
+<cell alignment="center" valignment="top" topline="true" bottomline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+Model
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" bottomline="true" leftline="true" rightline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+AIC Value
+\end_layout
+
+\end_inset
+</cell>
+</row>
+<row>
+<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+\begin_inset Formula $Y=\beta_{0}$
+\end_inset
+
+
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" rightline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+372.1803
+\end_layout
+
+\end_inset
+</cell>
+</row>
+<row>
+<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+\begin_inset Formula $Y=\beta_{0}+\beta_{3}\text{A3}$
+\end_inset
+
+
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" rightline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+319.7608
+\end_layout
+
+\end_inset
+</cell>
+</row>
+<row>
+<cell alignment="center" valignment="top" topline="true" bottomline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+\begin_inset Formula $Y=\beta_{0}+\beta_{1}\text{A1}+\beta_{3}\text{A3}$
+\end_inset
+
+
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" bottomline="true" leftline="true" rightline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+305.0896
+\end_layout
+
+\end_inset
+</cell>
+</row>
+</lyxtabular>
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+We give the final model as an output we get in R :-
+\end_layout
+
+\begin_layout Standard
+\begin_inset ERT
+status open
+
+\begin_layout Plain Layout
+
+<<comment=NA,echo=F,fig.width=6,fig.height=5,out.width='.8
+\backslash
+
+\backslash
+linewidth',warning=F,message=F,size='scriptsize'>>=
+\end_layout
+
+\begin_layout Plain Layout
+
+mod_wt_out = lm(Y ~ A1+A2+A3+A4, data = X[-c(12,20,30,36),])
+\end_layout
+
+\begin_layout Plain Layout
+
+ols_step_both_aic(mod_wt_out,details = TRUE)
+\end_layout
+
+\begin_layout Plain Layout
+
+@
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+Hence, this method gives the model containing covariates 
+\begin_inset Quotes eld
+\end_inset
+
+A1
+\begin_inset Quotes erd
+\end_inset
+
+, 
+\begin_inset Quotes eld
+\end_inset
+
+A3
+\begin_inset Quotes erd
+\end_inset
+
+ as the optimum one.
+\end_layout
+
+\begin_layout Subsection*
+Best Subset Selection
+\end_layout
+
+\begin_layout Standard
+We use different criterions for chosing optimal model among all the 
+\begin_inset Formula $15$
+\end_inset
+
+ possible linear models and plot the diagrams for all of them one by one.
+\end_layout
+
+\begin_layout Standard
+\begin_inset ERT
+status open
+
+\begin_layout Plain Layout
+
+<<comment=NA,echo=T,fig.width=6,fig.height=5,out.width='.8
+\backslash
+
+\backslash
+linewidth',warning=F,message=F,size='footnotesize'>>=
+\end_layout
+
+\begin_layout Plain Layout
+
+X_m = X[,-c(1,2)]
+\end_layout
+
+\begin_layout Plain Layout
+
+X1 <- X_m[-c(12,20,30,36),]
+\end_layout
+
+\begin_layout Plain Layout
+
+names(X1) <- c("V1","V2","V3","V4","V5")
+\end_layout
+
+\begin_layout Plain Layout
+
+models<-list()
+\end_layout
+
+\begin_layout Plain Layout
+
+models[["V1"]]<-lm(V5~V1,X1)
+\end_layout
+
+\begin_layout Plain Layout
+
+models[["V2"]]<-lm(V5~V2,X1)
+\end_layout
+
+\begin_layout Plain Layout
+
+models[["V3"]]<-lm(V5~V3,X1)
+\end_layout
+
+\begin_layout Plain Layout
+
+models[["V4"]]<-lm(V5~V4,X1)
+\end_layout
+
+\begin_layout Plain Layout
+
+models[["V12"]]<-lm(V5~V1+V2,X1)
+\end_layout
+
+\begin_layout Plain Layout
+
+models[["V13"]]<-lm(V5~V1+V3,X1)
+\end_layout
+
+\begin_layout Plain Layout
+
+models[["V14"]]<-lm(V5~V1+V4,X1)
+\end_layout
+
+\begin_layout Plain Layout
+
+models[["V23"]]<-lm(V5~V2+V3,X1)
+\end_layout
+
+\begin_layout Plain Layout
+
+models[["V24"]]<-lm(V5~V2+V4,X1)
+\end_layout
+
+\begin_layout Plain Layout
+
+models[["V34"]]<-lm(V5~V3+V4,X1)
+\end_layout
+
+\begin_layout Plain Layout
+
+models[["V123"]]<-lm(V5~V1+V2+V3,X1)
+\end_layout
+
+\begin_layout Plain Layout
+
+models[["V124"]]<-lm(V5~V1+V2+V4,X1)
+\end_layout
+
+\begin_layout Plain Layout
+
+models[["V134"]]<-lm(V5~V1+V3+V4,X1)
+\end_layout
+
+\begin_layout Plain Layout
+
+models[["V234"]]<-lm(V5~V2+V3+V4,X1)
+\end_layout
+
+\begin_layout Plain Layout
+
+models[["V1234"]]<-lm(V5~V1+V2+V3+V4,X1)
+\end_layout
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\begin_layout Plain Layout
+
+mnames<-factor(names(models),levels = names(models))
+\end_layout
+
+\begin_layout Plain Layout
+
+@
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Subsection*
+Coefficient of determination 
+\begin_inset Formula $\left(R^{2}\right)$
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+\align center
+\begin_inset ERT
+status open
+
+\begin_layout Plain Layout
+
+<<comment=NA,echo=T,fig.width=7.5,fig.height=6,out.width='.8
+\backslash
+
+\backslash
+linewidth',warning=F,message=F,size='footnotesize'>>=
+\end_layout
+
+\begin_layout Plain Layout
+
+R2 <- sapply(models, function(fit) summary(fit)$r.squared)
+\end_layout
+
+\begin_layout Plain Layout
+
+dotplot(R2 ~ mnames, type = "o", pch = 16,auto.key=list(space="right"),xlab="Mode
+ls",ylab=expression(R^2))
+\end_layout
+
+\begin_layout Plain Layout
+
+@
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Subsection*
+\begin_inset Formula $R^{2}$
+\end_inset
+
+ & 
+\begin_inset Formula $R_{adj}^{2}$
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+\align center
+\begin_inset ERT
+status open
+
+\begin_layout Plain Layout
+
+<<comment=NA,echo=T,fig.width=7.5,fig.height=6,out.width='.8
+\backslash
+
+\backslash
+linewidth',warning=F,message=F,size='footnotesize'>>=
+\end_layout
+
+\begin_layout Plain Layout
+
+adj.R2 <- sapply(models, function(fit) summary(fit)$adj.r.squared)
+\end_layout
+
+\begin_layout Plain Layout
+
+dotplot(R2 + adj.R2 ~ mnames, type = "o", pch = 16,auto.key=list(space="right"),xl
+ab="Models")
+\end_layout
+
+\begin_layout Plain Layout
+
+@
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Subsection*
+Mallow's 
+\begin_inset Formula $C_{p}$
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+\align center
+\begin_inset ERT
+status open
+
+\begin_layout Plain Layout
+
+<<comment=NA,echo=F,fig.width=7.5,fig.height=6,out.width='.8
+\backslash
+
+\backslash
+linewidth',warning=F,message=F,size='footnotesize'>>=
+\end_layout
+
+\begin_layout Plain Layout
+
+sigma.sq <- summary(models[["V1234"]])$sigma^2
+\end_layout
+
+\begin_layout Plain Layout
+
+Cp <- sapply(models, function(fit) extractAIC(fit, scale = sigma.sq)[2])
+\end_layout
+
+\begin_layout Plain Layout
+
+dotplot(Cp ~ mnames, type = "o", pch = 16)
+\end_layout
+
+\begin_layout Plain Layout
+
+@
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Subsection*
+Akaike information criterion (AIC)
+\end_layout
+
+\begin_layout Standard
+\align center
+\begin_inset ERT
+status open
+
+\begin_layout Plain Layout
+
+<<comment=NA,echo=T,fig.width=7.5,fig.height=6,out.width='.8
+\backslash
+
+\backslash
+linewidth',warning=F,message=F,size='footnotesize'>>=
+\end_layout
+
+\begin_layout Plain Layout
+
+AIC <- sapply(models, function(fit) AIC(fit))
+\end_layout
+
+\begin_layout Plain Layout
+
+dotplot(AIC ~ mnames, type = "o", pch = 16,xlab="Models")
+\end_layout
+
+\begin_layout Plain Layout
+
+@
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Subsection*
+Bayesian information criterion (BIC)
+\end_layout
+
+\begin_layout Standard
+\align center
+\begin_inset ERT
+status open
+
+\begin_layout Plain Layout
+
+<<comment=NA,echo=T,fig.width=7.5,fig.height=6,out.width='.8
+\backslash
+
+\backslash
+linewidth',warning=F,message=F,size='footnotesize'>>=
+\end_layout
+
+\begin_layout Plain Layout
+
+BIC <- sapply(models, function(fit) BIC(fit))
+\end_layout
+
+\begin_layout Plain Layout
+
+dotplot(BIC ~ mnames, type = "o", pch = 16,xlab="Models")
+\end_layout
+
+\begin_layout Plain Layout
+
+@
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+\begin_inset Newpage pagebreak
+\end_inset
+
+
+\end_layout
+
+\begin_layout Subsection*
+Leave-One-Out CV
+\end_layout
+
+\begin_layout Standard
+\align center
+\begin_inset ERT
+status open
+
+\begin_layout Plain Layout
+
+<<comment=NA,echo=T,fig.width=7.5,fig.height=6,out.width='.8
+\backslash
+
+\backslash
+linewidth',warning=F,message=F,size='footnotesize'>>=
+\end_layout
+
+\begin_layout Plain Layout
+
+CV = NULL
+\end_layout
+
+\begin_layout Plain Layout
+
+for(i in 1:15)
+\end_layout
+
+\begin_layout Plain Layout
+
+{
+\end_layout
+
+\begin_layout Plain Layout
+
+  X_mdl_mat = model.matrix(models[[i]])
+\end_layout
+
+\begin_layout Plain Layout
+
+  head(X_mdl_mat)
+\end_layout
+
+\begin_layout Plain Layout
+
+  Y_vec = X1$V5
+\end_layout
+
+\begin_layout Plain Layout
+
+  H = X_mdl_mat%*%solve(t(X_mdl_mat)%*%X_mdl_mat)%*%t(X_mdl_mat)
+\end_layout
+
+\begin_layout Plain Layout
+
+  h = diag(H)
+\end_layout
+
+\begin_layout Plain Layout
+
+  n_h = nrow(X1)
+\end_layout
+
+\begin_layout Plain Layout
+
+  CV[i] = (1/n_h)*sum((Y_vec-H%*%Y_vec)^2/(1-h)^2)
+\end_layout
+
+\begin_layout Plain Layout
+
+}
+\end_layout
+
+\begin_layout Plain Layout
+
+dotplot(CV ~ mnames, type = "o", pch = 16,xlab="Models")
+\end_layout
+
+\begin_layout Plain Layout
+
+@
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Subsection*
+Values of different measures for all the models
+\end_layout
+
+\begin_layout Standard
+We list down the values of 
+\begin_inset Formula $R^{2},R_{adj}^{2},\text{Mallow's }C_{p},AIC,BIC,CV(1)$
+\end_inset
+
+ values in one table for all the 
+\begin_inset Formula $15$
+\end_inset
+
+ models for better comparison :-
+\end_layout
+
+\begin_layout Standard
+\begin_inset ERT
+status open
+
+\begin_layout Plain Layout
+
+<<comment=NA,echo=F,fig.width=7.5,fig.height=6,out.width='.8
+\backslash
+
+\backslash
+linewidth',warning=F,message=F,size='footnotesize'>>=
+\end_layout
+
+\begin_layout Plain Layout
+
+data.frame(R2,adj.R2,Cp,AIC,BIC,CV)
+\end_layout
+
+\begin_layout Plain Layout
+
+@
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Subsection*
+Conclusion
+\end_layout
+
+\begin_layout Standard
+Now, we write down the optimals models we get from different model selection
+ criterions with corresponding values :-
+\end_layout
+
+\begin_layout Standard
+\align center
+\begin_inset Tabular
+<lyxtabular version="3" rows="6" columns="3">
+<features tabularvalignment="middle">
+<column alignment="center" valignment="top" width="2.5cm">
+<column alignment="center" valignment="top" width="5cm">
+<column alignment="center" valignment="top" width="2cm">
+<row>
+<cell alignment="center" valignment="top" topline="true" bottomline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+Criterions
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" bottomline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+Optimum Model
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" bottomline="true" leftline="true" rightline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+Value
+\end_layout
+
+\end_inset
+</cell>
+</row>
+<row>
+<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+\begin_inset Formula $R_{adj}^{2}$
+\end_inset
+
+
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+\begin_inset Formula $Y=\beta_{0}+\beta_{1}\text{A1}+\beta_{3}\text{A3}$
+\end_inset
+
+
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" rightline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+\begin_inset Formula $0.8065$
+\end_inset
+
+
+\end_layout
+
+\end_inset
+</cell>
+</row>
+<row>
+<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+Mallow's 
+\begin_inset Formula $C_{p}$
+\end_inset
+
+
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+\begin_inset Formula $Y=\beta_{0}+\beta_{1}\text{A1}+\beta_{3}\text{A3}$
+\end_inset
+
+
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" rightline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+\begin_inset Formula $2.598$
+\end_inset
+
+
+\end_layout
+
+\end_inset
+</cell>
+</row>
+<row>
+<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+AIC
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+\begin_inset Formula $Y=\beta_{0}+\beta_{1}\text{A1}+\beta_{3}\text{A3}$
+\end_inset
+
+
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" rightline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+\begin_inset Formula $305.089$
+\end_inset
+
+
+\end_layout
+
+\end_inset
+</cell>
+</row>
+<row>
+<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+BIC
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+\begin_inset Formula $Y=\beta_{0}+\beta_{1}\text{A1}+\beta_{3}\text{A3}$
+\end_inset
+
+
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" rightline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+\begin_inset Formula $312.0402$
+\end_inset
+
+
+\end_layout
+
+\end_inset
+</cell>
+</row>
+<row>
+<cell alignment="center" valignment="top" topline="true" bottomline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+\begin_inset Formula $CV\left(1\right)$
+\end_inset
+
+
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" bottomline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+\begin_inset Formula $Y=\beta_{0}+\beta_{1}\text{A1}+\beta_{3}\text{A3}$
+\end_inset
+
+
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" bottomline="true" leftline="true" rightline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+\begin_inset Formula $79.76883$
+\end_inset
+
+
+\end_layout
+
+\end_inset
+</cell>
+</row>
+</lyxtabular>
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+Hence, clearly this indicates among all the linear models, 
+\begin_inset Formula $Y=\beta_{0}+\beta_{1}\text{A1}+\beta_{3}\text{A3}$
+\end_inset
+
+ is optimum based on several criterions.
+ 
+\end_layout
+
+\begin_layout Standard
+This is also intuitive from the fact that here we are removing the covariates
+ which had linear dependence.
+\end_layout
+
+\begin_layout Standard
+In terms of terminology of the given dataset, the optimum predictors of
+ 
+\begin_inset Formula $Y=\text{Cirrhosis death rate }$
+\end_inset
+
+are 
+\begin_inset Formula $\text{A1}=\text{Urban population }$
+\end_inset
+
+ & 
+\begin_inset Formula $\text{A3}=\text{Wine consumption per capita}$
+\end_inset
+
+.
+\end_layout
+
+\begin_layout Standard
+So the optimum fitted model can be written as :-
+\begin_inset Formula 
+\[
+Y=9.9241+0.6397\text{A1}+1.5159\text{A3}
+\]
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+Also we observed that all the covariates in the model are signifcant.
+\end_layout
+
+\begin_layout Subsection*
+Obs vs Fitted Values
+\end_layout
+
+\begin_layout Standard
+We plot the observed vs fitted values obtained using this model :-
+\end_layout
+
+\begin_layout Standard
+\begin_inset ERT
+status open
+
+\begin_layout Plain Layout
+
+<<comment=NA,echo=T,fig.width=6,fig.height=5,out.width='.8
+\backslash
+
+\backslash
+linewidth',warning=F,message=F,size='scriptsize'>>=
+\end_layout
+
+\begin_layout Plain Layout
+
+X1 = X[-c(12,20,30,36),]
+\end_layout
+
+\begin_layout Plain Layout
+
+mod_opt = lm(Y ~ A1+A3, data = X[-c(12,20,30,36),])
+\end_layout
+
+\begin_layout Plain Layout
+
+plot(1:nrow(X1),X1$Y,type = "o",pch = 20,ylab = 
+\begin_inset Quotes eld
+\end_inset
+
+observed & predicted values
+\begin_inset Quotes erd
+\end_inset
+
+,xlab = 
+\begin_inset Quotes eld
+\end_inset
+
+Index
+\begin_inset Quotes erd
+\end_inset
+
+)
+\end_layout
+
+\begin_layout Plain Layout
+
+lines(1:nrow(X1),mod_opt$fitted.values,type = "o",pch = 20,col = "red",lty
+ = 2)
+\end_layout
+
+\begin_layout Plain Layout
+
+abline(v = 1:nrow(X1),lty = 2,col = rgb(0,1,0,alpha = 0.3))
+\end_layout
+
+\begin_layout Plain Layout
+
+legend("topleft",legend = c("Obs","Pred"),fill = c("black","red"))
+\end_layout
+
+\begin_layout Plain Layout
+
+@
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+Here we can see the prediction is accurate compared to the full model.
+\end_layout
+
+\begin_layout Subsection*
+Conclusion
+\end_layout
+
+\begin_layout Standard
+Again we perform all the diagonistic tests for this final model and find
+ the following :-
+\end_layout
+
+\begin_layout Standard
+\align center
+\begin_inset Tabular
+<lyxtabular version="3" rows="5" columns="2">
+<features tabularvalignment="middle">
+<column alignment="center" valignment="top">
+<column alignment="center" valignment="top">
+<row>
+<cell alignment="center" valignment="top" topline="true" bottomline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+Tests
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" bottomline="true" leftline="true" rightline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+p-values
+\end_layout
+
+\end_inset
+</cell>
+</row>
+<row>
+<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+Shapiro-Wilk
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" rightline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+0.6282
+\end_layout
+
+\end_inset
+</cell>
+</row>
+<row>
+<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+Durbin-Watson
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" rightline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+0.645
+\end_layout
+
+\end_inset
+</cell>
+</row>
+<row>
+<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+Breusch-Pagan
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" rightline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+0.2723
+\end_layout
+
+\end_inset
+</cell>
+</row>
+<row>
+<cell alignment="center" valignment="top" topline="true" bottomline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+Breusch-Godfrey
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" bottomline="true" leftline="true" rightline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+0.9345
+\end_layout
+
+\end_inset
+</cell>
+</row>
+</lyxtabular>
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+All the assumptions seem to be satishfied here.
+ Hence we can really consider this to be a good model.
+\end_layout
+
+\begin_layout Subsection*
+Models with Interaction Terms
+\end_layout
+
+\begin_layout Standard
+One class of models that we have not considered yet are those with interaction
+ terms (upto second order).
+ Since there can be too many of them, we will not perform best subset selection
+ here.
+ Rather we again perform stepwise regression for choosing an optimal one
+ among them.
+\end_layout
+
+\begin_layout Standard
+In this class, we get the following model :-
+\end_layout
+
+\begin_layout Standard
+\begin_inset ERT
+status open
+
+\begin_layout Plain Layout
+
+<<comment=NA,echo=T,fig.width=6,fig.height=5,out.width='.8
+\backslash
+
+\backslash
+linewidth',warning=F,message=F,size='scriptsize'>>=
+\end_layout
+
+\begin_layout Plain Layout
+
+mod_wt_out = lm(Y ~ A1+A2+A3+A4, data = X[-c(12,20,30,36),])
+\end_layout
+
+\begin_layout Plain Layout
+
+STEP_REG = stepAIC(mod_wt_out,scope = list(upper = ~(A1+A2+A3+A4)^2, lower
+ = ~1),trace = TRUE)
+\end_layout
+
+\begin_layout Plain Layout
+
+STEP_REG
+\end_layout
+
+\begin_layout Plain Layout
+
+@
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+This model has an adjusted 
+\begin_inset Formula $R^{2}$
+\end_inset
+
+ value equal to 
+\begin_inset Formula $0.8299$
+\end_inset
+
+.
+ But the main problem is this model has very high vif values and many of
+ the predictors are not signifcant.
+ So we don't consider these type of models.
+\end_layout
+
+\begin_layout Subsection*
+Conclusion
+\end_layout
+
+\begin_layout Standard
+Hence we conclude our final multiple linear regression model is :-
+\begin_inset Formula 
+\[
+Y=9.9241+0.6397\text{A1}+1.5159\text{A3}
+\]
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+Obviously this model also has some drawback and there is no such 
+\begin_inset Quotes eld
+\end_inset
+
+best
+\begin_inset Quotes erd
+\end_inset
+
+ model that we can have but this performs more or less better than most
+ of the models hence, it is a good one.
+\end_layout
+
+\begin_layout Standard
+Next we use other types of regression models with different interpretations.
+\end_layout
+
+\begin_layout Subsection
+Shrinkage Methods
+\end_layout
+
+\begin_layout Subsection*
+Ridge Regression
+\end_layout
+
+\begin_layout Standard
+An alternate approach to deal with collinearity is fitting a ridge regression
+ model as it can improve the accuracy of the predictions.
+ The ridge estimate of the model parameters is 
+\begin_inset Formula $\widehat{\boldsymbol{\beta}}\left(k\right)=\left(\boldsymbol{X}^{T}\boldsymbol{X}+k\boldsymbol{I}\right)^{-1}\boldsymbol{X}^{T}\boldsymbol{Y}$
+\end_inset
+
+ where 
+\begin_inset Formula $k$
+\end_inset
+
+ is the ridge parameter.
+ For an optimal choice of 
+\begin_inset Formula $k$
+\end_inset
+
+, we calculate estimates of prediction errors of the ridge predictors for
+ different choices of 
+\begin_inset Formula $k$
+\end_inset
+
+ over a set of trial values.
+ This can be expressed as 
+\begin_inset Formula $CV_{k}\left(1\right)=\frac{1}{n}\sum\limits _{i=1}^{n}\frac{\left[Y_{i}-\boldsymbol{x}_{i}^{T}\widehat{\boldsymbol{\beta}}\left(k\right)\right]^{2}}{\left[1-a_{ii}\left(k\right)\right]^{2}}$
+\end_inset
+
+ and choose the 
+\begin_inset Formula $k_{opt}$
+\end_inset
+
+ for which this quantity is minimum.
+\end_layout
+
+\begin_layout Standard
+We plot the 
+\begin_inset Formula $CV_{k}\left(1\right)$
+\end_inset
+
+ values for different choices of 
+\begin_inset Formula $k$
+\end_inset
+
+ :-
+\end_layout
+
+\begin_layout Standard
+\begin_inset ERT
+status open
+
+\begin_layout Plain Layout
+
+<<comment=NA,echo=T,fig.width=7.5,fig.height=6,out.width='.8
+\backslash
+
+\backslash
+linewidth',warning=F,message=F,size='footnotesize'>>=
+\end_layout
+
+\begin_layout Plain Layout
+
+k_grid = 10^seq(-2,1/2,length.out = 100)
+\end_layout
+
+\begin_layout Plain Layout
+
+PE = NULL
+\end_layout
+
+\begin_layout Plain Layout
+
+X_R = as.matrix(X[-c(12,20,30,36),c(2,3,4,5,6)])
+\end_layout
+
+\begin_layout Plain Layout
+
+Y_R = as.matrix(X[-c(12,20,30,36),c(7)])
+\end_layout
+
+\begin_layout Plain Layout
+
+n = nrow(X_R)
+\end_layout
+
+\begin_layout Plain Layout
+
+for(i in 1:length(k_grid))
+\end_layout
+
+\begin_layout Plain Layout
+
+{
+\end_layout
+
+\begin_layout Plain Layout
+
+  k = k_grid[i]
+\end_layout
+
+\begin_layout Plain Layout
+
+  beta_k = solve(t(X_R)%*%X_R + k*diag(rep(1,5)))%*%t(X_R)%*%Y_R
+\end_layout
+
+\begin_layout Plain Layout
+
+  A_k = X_R%*%solve(t(X_R)%*%X_R + k*diag(rep(1,5)))%*%t(X_R)
+\end_layout
+
+\begin_layout Plain Layout
+
+  Y_ft_R = X_R%*%beta_k
+\end_layout
+
+\begin_layout Plain Layout
+
+  A_K_diag = diag(A_k)
+\end_layout
+
+\begin_layout Plain Layout
+
+  PE[i] = (1/n)*sum((Y_R-Y_ft_R)^2/(1-A_K_diag)^2)
+\end_layout
+
+\begin_layout Plain Layout
+
+}
+\end_layout
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\begin_layout Plain Layout
+
+plot(k_grid,PE,type = "l",ylab = "CV(1)",xBlab = "k")
+\end_layout
+
+\begin_layout Plain Layout
+
+k_opt = k_grid[which(PE == min(PE))]
+\end_layout
+
+\begin_layout Plain Layout
+
+abline(v = k_opt)
+\end_layout
+
+\begin_layout Plain Layout
+
+@
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+We find that the 
+\begin_inset Formula $CV_{k}\left(1\right)$
+\end_inset
+
+ is minimum for 
+\begin_inset Formula $k\approx0.3898$
+\end_inset
+
+ hence, we calculate the corresponding ridge estimates.
+\end_layout
+
+\begin_layout Standard
+The fitted model then becomes :-
+\begin_inset Formula 
+\[
+Y=11.777+0.767\text{A1}+-0.322\text{A2}+1.324\text{A3}+0.114\text{A4}
+\]
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+This model has estimated prediction error 
+\begin_inset Formula $\approx83.612$
+\end_inset
+
+.
+\end_layout
+
+\begin_layout Standard
+This is close to the optimum OLS model that we have fitted.
+\end_layout
+
+\begin_layout Standard
+We plot the observed & fitted values with the same index in the x-axis and
+ get the following output :-
+\end_layout
+
+\begin_layout Standard
+\begin_inset ERT
+status open
+
+\begin_layout Plain Layout
+
+<<comment=NA,echo=F,fig.width=6,fig.height=5,out.width='.8
+\backslash
+
+\backslash
+linewidth',warning=F,message=F,size='scriptsize'>>=
+\end_layout
+
+\begin_layout Plain Layout
+
+beta_opt = solve(t(X_R)%*%X_R + k_opt*diag(rep(1,5)))%*%t(X_R)%*%Y_R
+\end_layout
+
+\begin_layout Plain Layout
+
+plot(1:nrow(X_R),X_R%*%beta_opt,type = "o",pch = 20,ylab = 
+\begin_inset Quotes eld
+\end_inset
+
+observed & predicted values
+\begin_inset Quotes erd
+\end_inset
+
+,xlab = 
+\begin_inset Quotes eld
+\end_inset
+
+Index
+\begin_inset Quotes erd
+\end_inset
+
+,ylim = c(30,110))
+\end_layout
+
+\begin_layout Plain Layout
+
+lines(1:nrow(X_R),Y_R,type = "o",pch = 20,col = "red",lty = 2)
+\end_layout
+
+\begin_layout Plain Layout
+
+abline(v = 1:nrow(X),lty = 2,col = rgb(0,1,0,alpha = 0.3))
+\end_layout
+
+\begin_layout Plain Layout
+
+legend("topleft",legend = c("Obs","Pred"),fill = c("black","red"))
+\end_layout
+
+\begin_layout Plain Layout
+
+@
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Subsection*
+Lasso Regression
+\end_layout
+
+\begin_layout Standard
+Another efficient way of model selection is using the Lasso Regression method.
+ Here we minimize the sum of squares 
+\begin_inset Formula $||\boldsymbol{Y}-\boldsymbol{X}\boldsymbol{\beta}||^{2}$
+\end_inset
+
+ subject to the constraint 
+\begin_inset Formula $\sum\limits _{j}\left|\beta_{j}\right|\leq\lambda$
+\end_inset
+
+ for some 
+\begin_inset Formula $\lambda>0$
+\end_inset
+
+.
+\end_layout
+
+\begin_layout Standard
+Using R, we find the Lasso Estimates of 
+\begin_inset Formula $\boldsymbol{\beta}$
+\end_inset
+
+ where the value of 
+\begin_inset Formula $\lambda$
+\end_inset
+
+ is chosen using 
+\begin_inset Formula $k$
+\end_inset
+
+-fold cross-validation criteria.
+\end_layout
+
+\begin_layout Standard
+The optimum value of 
+\begin_inset Formula $\lambda$
+\end_inset
+
+ chosen by the criteria approximately equals 
+\begin_inset Formula $\approx0.501$
+\end_inset
+
+ and the model is :-
+\end_layout
+
+\begin_layout Standard
+\begin_inset ERT
+status open
+
+\begin_layout Plain Layout
+
+<<comment=NA,echo=T,fig.width=6,fig.height=5,out.width='.8
+\backslash
+
+\backslash
+linewidth',warning=F,message=F,size='scriptsize'>>=
+\end_layout
+
+\begin_layout Plain Layout
+
+library(glmnet)
+\end_layout
+
+\begin_layout Plain Layout
+
+x <- as.matrix(X[-c(12,20,30,36),c(3,4,5,6)])
+\end_layout
+
+\begin_layout Plain Layout
+
+y <- X[-c(12,20,30,36),7]
+\end_layout
+
+\begin_layout Plain Layout
+
+lambdas <- 10^seq(-1, 5, by = 0.1)
+\end_layout
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\begin_layout Plain Layout
+
+lasso_reg <- cv.glmnet(x,y, alpha = 1, lambda = lambdas, standardize = TRUE,
+ nfolds = 10)
+\end_layout
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\begin_layout Plain Layout
+
+lambda_best <- lasso_reg$lambda.min 
+\end_layout
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\begin_layout Plain Layout
+
+lasso_model <- glmnet(x,y, alpha = 1, lambda = 5, standardize = TRUE)
+\end_layout
+
+\begin_layout Plain Layout
+
+c(lasso_model$a0,t(lasso_model$beta))
+\end_layout
+
+\begin_layout Plain Layout
+
+@
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+Hence the Lasso Estimates of the parameters 
+\begin_inset Formula $\boldsymbol{\beta}=\begin{pmatrix}\beta_{0}\\
+\beta_{1}\\
+\beta_{2}\\
+\beta_{3}\\
+\beta_{4}
+\end{pmatrix}=\begin{pmatrix}25.28\\
+0.457\\
+0\\
+1.013\\
+0
+\end{pmatrix}$
+\end_inset
+
+.
+\end_layout
+
+\begin_layout Standard
+As we can see from the output, here also, the variables 
+\begin_inset Quotes eld
+\end_inset
+
+A2
+\begin_inset Quotes erd
+\end_inset
+
+, 
+\begin_inset Quotes eld
+\end_inset
+
+A4
+\begin_inset Quotes erd
+\end_inset
+
+ has been dropped and this also gives strong evidence in favour of the optimum
+ linear model.
+\end_layout
+
+\begin_layout Standard
+Here also make the observed and fitted plot for different index values :-
+\end_layout
+
+\begin_layout Standard
+\begin_inset ERT
+status open
+
+\begin_layout Plain Layout
+
+<<comment=NA,echo=F,fig.width=6,fig.height=5,out.width='.8
+\backslash
+
+\backslash
+linewidth',warning=F,message=F,size='scriptsize'>>=
+\end_layout
+
+\begin_layout Plain Layout
+
+Y_pred = 25.2888 + 0.4579335*X_R[,2] + 1.0131185*X_R[,4]
+\end_layout
+
+\begin_layout Plain Layout
+
+plot(1:nrow(X_R),Y_R,type = "o",pch = 20)
+\end_layout
+
+\begin_layout Plain Layout
+
+lines(1:nrow(X_R),Y_pred,type = "o",pch = 20,col = "red",lty = 2)
+\end_layout
+
+\begin_layout Plain Layout
+
+abline(v = c(12,20,30,36),lty = 2,col = rgb(1,0,0,alpha = 0.3))
+\end_layout
+
+\begin_layout Plain Layout
+
+@
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Subsection
+Robust Regression Methods
+\end_layout
+
+\begin_layout Standard
+We have detected influential points in our dataset, and also removed them
+ to get better models.
+\end_layout
+
+\begin_layout Standard
+Now, we demonstrate using different robust regression methods how they can
+ be used even if we have outliers in our dataset.
+\end_layout
+
+\begin_layout Standard
+So we perform the rest of the methods using the full dataset, without removing
+ any observation.
+\end_layout
+
+\begin_layout Subsection*
+Least Absolute Deviation
+\end_layout
+
+\begin_layout Standard
+Here we minimize the quantity 
+\begin_inset Formula $\sum\limits _{i}\left|e_{i}\left(\boldsymbol{b}\right)\right|$
+\end_inset
+
+ i.e.
+ 
+\begin_inset Formula $\widehat{\boldsymbol{\beta}}_{LAD}=\underset{\boldsymbol{b}}{\text{argmin}}\sum\limits _{i}\left|e_{i}\left(\boldsymbol{b}\right)\right|$
+\end_inset
+
+where 
+\begin_inset Formula $e_{i}\left(\boldsymbol{b}\right)=Y_{i}-\boldsymbol{x}_{i}^{T}\boldsymbol{b}$
+\end_inset
+
+.
+\end_layout
+
+\begin_layout Standard
+The estimated values of 
+\begin_inset Formula $\widehat{\boldsymbol{\beta}}_{LAD}$
+\end_inset
+
+ equals :-
+\end_layout
+
+\begin_layout Standard
+\begin_inset ERT
+status open
+
+\begin_layout Plain Layout
+
+<<comment=NA,echo=T,fig.width=6,fig.height=5,out.width='.8
+\backslash
+
+\backslash
+linewidth',warning=F,message=F,size='scriptsize'>>=
+\end_layout
+
+\begin_layout Plain Layout
+
+library("L1pack")
+\end_layout
+
+\begin_layout Plain Layout
+
+rmodel_l <- lad(formula = Y~A1+A2+A3+A4,data = X)
+\end_layout
+
+\begin_layout Plain Layout
+
+rmodel_l$coefficients
+\end_layout
+
+\begin_layout Plain Layout
+
+@
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+We plot the observed vs fitted values obtained using this model :-
+\end_layout
+
+\begin_layout Standard
+\begin_inset ERT
+status open
+
+\begin_layout Plain Layout
+
+<<comment=NA,echo=T,fig.width=6,fig.height=5,out.width='.8
+\backslash
+
+\backslash
+linewidth',warning=F,message=F,size='scriptsize'>>=
+\end_layout
+
+\begin_layout Plain Layout
+
+plot(1:nrow(X),X$Y,type = "o",pch = 20,ylab = 
+\begin_inset Quotes eld
+\end_inset
+
+observed & predicted values
+\begin_inset Quotes erd
+\end_inset
+
+,xlab = 
+\begin_inset Quotes eld
+\end_inset
+
+Index
+\begin_inset Quotes erd
+\end_inset
+
+)
+\end_layout
+
+\begin_layout Plain Layout
+
+lines(1:nrow(X),rmodel_l$fitted.values,type = "o",pch = 20,col = "red",lty
+ = 2)
+\end_layout
+
+\begin_layout Plain Layout
+
+abline(v = 1:nrow(X),lty = 2,col = rgb(0,1,0,alpha = 0.3))
+\end_layout
+
+\begin_layout Plain Layout
+
+legend("topleft",legend = c("Obs","Pred"),fill = c("black","red"))
+\end_layout
+
+\begin_layout Plain Layout
+
+@
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+The plot shows here the predicted values are more or less accurate for all
+ the observations.
+\end_layout
+
+\begin_layout Subsection*
+Least Median Square
+\end_layout
+
+\begin_layout Standard
+Here we minimize the median of the squared residuals 
+\begin_inset Formula $\widehat{\boldsymbol{\beta}}_{LMS}=\underset{\boldsymbol{b}}{\text{argmin}}\,\,\underset{i}{\text{med}}\,\,e_{i}^{2}\left(\boldsymbol{b}\right)$
+\end_inset
+
+ .
+\end_layout
+
+\begin_layout Standard
+Using R, we get the estimated value of 
+\begin_inset Formula $\widehat{\boldsymbol{\beta}}_{LMS}$
+\end_inset
+
+ as :-
+\end_layout
+
+\begin_layout Standard
+\begin_inset ERT
+status open
+
+\begin_layout Plain Layout
+
+<<comment=NA,echo=T,fig.width=6,fig.height=5,out.width='.8
+\backslash
+
+\backslash
+linewidth',warning=F,message=F,size='scriptsize'>>=
+\end_layout
+
+\begin_layout Plain Layout
+
+rmodel_l <- lqs(Y~A1+A2+A3+A4,data = X,method = "lms")
+\end_layout
+
+\begin_layout Plain Layout
+
+rmodel_l$coefficients
+\end_layout
+
+\begin_layout Plain Layout
+
+@
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+We plot the observed vs fitted values obtained using this model :-
+\end_layout
+
+\begin_layout Standard
+\begin_inset ERT
+status open
+
+\begin_layout Plain Layout
+
+<<comment=NA,echo=T,fig.width=6,fig.height=5,out.width='.8
+\backslash
+
+\backslash
+linewidth',warning=F,message=F,size='scriptsize'>>=
+\end_layout
+
+\begin_layout Plain Layout
+
+par(mfrow = c(1,1))
+\end_layout
+
+\begin_layout Plain Layout
+
+plot(1:nrow(X),X$Y,type = "o",pch = 20,ylab = 
+\begin_inset Quotes eld
+\end_inset
+
+observed & predicted values
+\begin_inset Quotes erd
+\end_inset
+
+,xlab = 
+\begin_inset Quotes eld
+\end_inset
+
+Index
+\begin_inset Quotes erd
+\end_inset
+
+)
+\end_layout
+
+\begin_layout Plain Layout
+
+lines(1:nrow(X),rmodel_l$fitted.values,type = "o",pch = 20,col = "red",lty
+ = 2)
+\end_layout
+
+\begin_layout Plain Layout
+
+abline(v = 1:nrow(X),lty = 2,col = rgb(0,1,0,alpha = 0.3))
+\end_layout
+
+\begin_layout Plain Layout
+
+legend("topleft",legend = c("Obs","Pred"),fill = c("black","red"))
+\end_layout
+
+\begin_layout Plain Layout
+
+@
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+We can see the prediction is quite accurate at some places where as it is
+ bad at some others possibly due to the presence of outliers.
+\end_layout
+
+\begin_layout Subsection*
+Least Trimmed Squares Estimate
+\end_layout
+
+\begin_layout Standard
+Lastly, we compute the LTS estimates of 
+\begin_inset Formula $\boldsymbol{\beta}$
+\end_inset
+
+ where we minimize the trimmed mean of the squared residuals 
+\begin_inset Formula $\widehat{\boldsymbol{\beta}}_{LMS}=\underset{\boldsymbol{b}}{\text{argmin}}\frac{1}{h}\sum\limits _{i=1}^{h}e_{i}^{2}\left(\boldsymbol{b}\right)$
+\end_inset
+
+ for some appropriate choice of 
+\begin_inset Formula $h$
+\end_inset
+
+.
+ (Here we choose 
+\begin_inset Formula $h=\left[\nicefrac{n}{2}\right]+1$
+\end_inset
+
+)
+\end_layout
+
+\begin_layout Standard
+\begin_inset ERT
+status open
+
+\begin_layout Plain Layout
+
+<<comment=NA,echo=T,fig.width=6,fig.height=5,out.width='.8
+\backslash
+
+\backslash
+linewidth',warning=F,message=F,size='scriptsize'>>=
+\end_layout
+
+\begin_layout Plain Layout
+
+rmodel_l<-lqs(Y~A1+A2+A3+A4,data = X,method = "lts")
+\end_layout
+
+\begin_layout Plain Layout
+
+rmodel_l$coefficients
+\end_layout
+
+\begin_layout Plain Layout
+
+@
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+We plot the observed vs fitted values obtained using this model :-
+\end_layout
+
+\begin_layout Standard
+\begin_inset ERT
+status open
+
+\begin_layout Plain Layout
+
+<<comment=NA,echo=T,fig.width=6,fig.height=5,out.width='.8
+\backslash
+
+\backslash
+linewidth',warning=F,message=F,size='scriptsize'>>=
+\end_layout
+
+\begin_layout Plain Layout
+
+plot(1:nrow(X),X$Y,type = "o",pch = 20,ylab = 
+\begin_inset Quotes eld
+\end_inset
+
+observed & predicted values
+\begin_inset Quotes erd
+\end_inset
+
+,xlab = 
+\begin_inset Quotes eld
+\end_inset
+
+Index
+\begin_inset Quotes erd
+\end_inset
+
+)
+\end_layout
+
+\begin_layout Plain Layout
+
+lines(1:nrow(X),rmodel_l$fitted.values,type = "o",pch = 20,col = "red",lty
+ = 2)
+\end_layout
+
+\begin_layout Plain Layout
+
+abline(v = 1:nrow(X),lty = 2,col = rgb(0,1,0,alpha = 0.3))
+\end_layout
+
+\begin_layout Plain Layout
+
+legend("topleft",legend = c("Obs","Pred"),fill = c("black","red"))
+\end_layout
+
+\begin_layout Plain Layout
+
+@
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+We can see that this method performs better in terms of prediction compared
+ to LMS estimates.
+\end_layout
+
+\begin_layout Subsection*
+Comparative Study Of All Models
+\end_layout
+
+\begin_layout Standard
+Finally, as a measure of comparison of different models, we use the root
+ mean square error 
+\begin_inset Formula $RMSE=\sqrt{\frac{1}{n}\sum\limits _{i=1}^{n}\left(\widehat{y}_{i}-y_{i}\right)^{2}}$
+\end_inset
+
+where 
+\begin_inset Formula $\widehat{y}_{i}$
+\end_inset
+
+ denotes the fitted values using different regression models.
+ We calculate this measure for all the 
+\begin_inset Quotes eld
+\end_inset
+
+good
+\begin_inset Quotes erd
+\end_inset
+
+ models we have found so far :-
+\end_layout
+
+\begin_layout Standard
+\align center
+\begin_inset Tabular
+<lyxtabular version="3" rows="7" columns="2">
+<features tabularvalignment="middle">
+<column alignment="center" valignment="top">
+<column alignment="center" valignment="top">
+<row>
+<cell alignment="center" valignment="top" topline="true" bottomline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+Methods
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" bottomline="true" leftline="true" rightline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+\begin_inset Formula $RMSE$
+\end_inset
+
+ values
+\end_layout
+
+\end_inset
+</cell>
+</row>
+<row>
+<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+OLS model with 
+\begin_inset Quotes eld
+\end_inset
+
+A1
+\begin_inset Quotes erd
+\end_inset
+
+ & 
+\begin_inset Quotes eld
+\end_inset
+
+A3
+\begin_inset Quotes erd
+\end_inset
+
+
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" rightline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+8.313178
+\end_layout
+
+\end_inset
+</cell>
+</row>
+<row>
+<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+Ridge Model
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" rightline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+8.195655
+\end_layout
+
+\end_inset
+</cell>
+</row>
+<row>
+<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+Lasso Model
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" rightline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+9.889319
+\end_layout
+
+\end_inset
+</cell>
+</row>
+<row>
+<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+LAD Model
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" rightline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+10.59494
+\end_layout
+
+\end_inset
+</cell>
+</row>
+<row>
+<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+LMS Model
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" rightline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+11.6656
+\end_layout
+
+\end_inset
+</cell>
+</row>
+<row>
+<cell alignment="center" valignment="top" topline="true" bottomline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+LTS Model
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" bottomline="true" leftline="true" rightline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+11.0904
+\end_layout
+
+\end_inset
+</cell>
+</row>
+</lyxtabular>
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+Hence, we can conclude the Ridge and the OLS model with influential points
+ removed with covariates 
+\begin_inset Quotes eld
+\end_inset
+
+A1
+\begin_inset Quotes erd
+\end_inset
+
+ & 
+\begin_inset Quotes eld
+\end_inset
+
+A3
+\begin_inset Quotes erd
+\end_inset
+
+ performs more or less better than the others in terms of prediction accuracy.
+\end_layout
+
+\end_body
+\end_document
